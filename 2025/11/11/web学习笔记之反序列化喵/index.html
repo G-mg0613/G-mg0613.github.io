@@ -9,7 +9,7 @@
   
   <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_4k4bc36ef96';window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'http://example.com';</script>
   <title>
-    关于 | Dawn
+    web学习笔记之反序列化喵 | Dawn
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
@@ -17,19 +17,19 @@
     
 <link rel="stylesheet" href="/css/loader.css">
 
-    <meta name="description" content="关于">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="http://example.com/about/index.html">
+    <meta name="description" content="(先写目前学到的喵~，之前的后面会补上的）[TOC] 反序列化是什么喵？序列化数组序列化对象序列化时，只保存成员变量，不保存方法 123456789101112131415161718192021&lt;? php    class A&#123;    public $var1; &#x2F;&#x2F;访问修饰符public，下面同理    protected $var2;    private $var3;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web学习笔记之反序列化喵">
+<meta property="og:url" content="http://example.com/2025/11/11/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/index.html">
 <meta property="og:site_name" content="Dawn">
-<meta property="og:description" content="关于">
+<meta property="og:description" content="(先写目前学到的喵~，之前的后面会补上的）[TOC] 反序列化是什么喵？序列化数组序列化对象序列化时，只保存成员变量，不保存方法 123456789101112131415161718192021&lt;? php    class A&#123;    public $var1; &#x2F;&#x2F;访问修饰符public，下面同理    protected $var2;    private $var3;">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/banner.webp">
-<meta property="article:published_time" content="2021-09-22T13:01:47.000Z">
-<meta property="article:modified_time" content="2025-11-06T16:00:14.083Z">
+<meta property="article:published_time" content="2025-11-11T08:23:17.000Z">
+<meta property="article:modified_time" content="2025-11-11T15:44:23.923Z">
 <meta property="article:author" content="Gloria">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="反序列化">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/banner.webp">
     <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -127,13 +127,12 @@
   </nav>
 </div>
 <header id="header" aria-label="Site header">
-      <picture>
-      </picture>
-        <img  fetchpriority="high" src="/images/banner.webp" alt="关于">
+    <picture></picture>
+    <img  fetchpriority="high" src="/images/1.jpg" alt="web学习笔记之反序列化喵">
   <div id="header-outer">
     <div id="header-title">
           <span id="logo">
-            <h1 data-aos="slide-up">关于</h1>
+            <h1 data-aos="slide-up">web学习笔记之反序列化喵</h1>
           </span>
         <h2 id="subtitle-wrap" data-aos="slide-down">
         </h2>
@@ -143,10 +142,15 @@
 
         <div id="content" aria-label="Page content" class="sidebar-left"  >
           <aside id="sidebar" aria-label="Sidebar">
-  <div class="sidebar-wrapper-container ">
+  <div class="sidebar-wrapper-container sticky">
   <div class="sidebar-wrapper">
     <div class="sidebar-wrap" data-aos="fade-up">
-        <div class="sidebar-author">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%86%99%E7%9B%AE%E5%89%8D%E5%AD%A6%E5%88%B0%E7%9A%84%E5%96%B5-%EF%BC%8C%E4%B9%8B%E5%89%8D%E7%9A%84%E5%90%8E%E9%9D%A2%E4%BC%9A%E8%A1%A5%E4%B8%8A%E7%9A%84%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">(先写目前学到的喵~，之前的后面会补上的）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%98%AF%E4%BB%80%E4%B9%88%E5%96%B5%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">反序列化是什么喵？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B0%E7%BB%84"><span class="toc-number">1.2.</span> <span class="toc-text">序列化数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.</span> <span class="toc-text">序列化对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E4%B8%AD%E7%9A%84%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">类中的魔法方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95%E6%98%AF%E4%BB%80%E4%B9%88%E5%96%B5%EF%BC%9F"><span class="toc-number">1.4.1.</span> <span class="toc-text">魔术方法是什么喵？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95%E5%96%B5-%EF%BC%88%E5%85%B6%E5%AE%9E%E8%BF%98%E6%9C%89%E5%A5%BD%E5%A4%9A%EF%BC%8C%E8%BF%99%E9%87%8C%E5%85%88%E4%BA%86%E8%A7%A3%E8%BF%99%E5%9B%9B%E4%B8%AA%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">常用的魔术方法喵~（其实还有好多，这里先了解这四个）</span></a></li></ol></li></ol></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
   <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
   <div class="sidebar-author-name">Gloria</div>
   <div class="sidebar-description"></div>
@@ -197,7 +201,11 @@
         <div class="sidebar-menu-link">Friend</div>
       </div>
 </div>
-
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
     </div>
   </div>
   <div class="sidebar-widget">
@@ -205,37 +213,122 @@
   </div>
 </aside>
 
-          <section id="main" aria-label="Main content"><article id="page-" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+          <section id="main" aria-label="Main content"><article id="post-web学习笔记之反序列化喵" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
       <div class="article-date">
   <span class="article-date-link icon-calendar" data-aos="zoom-in">
-    <time datetime="2021-09-22T13:01:47.000Z" itemprop="datePublished">2021-09-22</time>
-    <time style="display: none;" id="post-update-time">2025-11-07</time>
+    <time datetime="2025-11-11T08:23:17.000Z" itemprop="datePublished">2025-11-11</time>
+    <time style="display: none;" id="post-update-time">2025-11-11</time>
   </span>
 </div>
 
-      
+        <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="学习笔记">学习笔记</a>
+  </div>
+
     </div>
     
     <div class="hr-line"></div>
     
     <div class="e-content article-entry" itemprop="articleBody">
-        <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2>
+        <h2 id="先写目前学到的喵-，之前的后面会补上的）"><a href="#先写目前学到的喵-，之前的后面会补上的）" class="headerlink" title="(先写目前学到的喵~，之前的后面会补上的）"></a>(先写目前学到的喵~，之前的后面会补上的）</h2><p>[TOC]</p>
+<h3 id="反序列化是什么喵？"><a href="#反序列化是什么喵？" class="headerlink" title="反序列化是什么喵？"></a>反序列化是什么喵？</h3><h3 id="序列化数组"><a href="#序列化数组" class="headerlink" title="序列化数组"></a>序列化数组</h3><h3 id="序列化对象"><a href="#序列化对象" class="headerlink" title="序列化对象"></a>序列化对象</h3><p>序列化时，只保存成员变量，不保存方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span> php</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$var1</span>; <span class="comment">//访问修饰符public，下面同理</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$var2</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$var3</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$var1</span>,<span class="variable">$var2</span>,<span class="variable">$var3</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span> -&gt; var1 = <span class="variable">$var1</span>; <span class="comment">//this 初始化一下喵</span></span><br><span class="line">        <span class="variable language_">$this</span> -&gt; var2 = <span class="variable">$var2</span>;<span class="comment">//var1 之类的是属性名</span></span><br><span class="line">        <span class="variable language_">$this</span> -&gt; var3 = <span class="variable">$var3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//序列化</span></span><br><span class="line"><span class="variable">$a</span> = <span class="keyword">new</span> <span class="title function_ invoke__">A</span>(<span class="string">&quot;hello&quot;</span>,<span class="string">&quot;tom&quot;</span>,<span class="number">5</span>);<span class="comment">//hello之类的是属性的值</span></span><br><span class="line"><span class="variable">$str</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="variable">$str2</span> = <span class="title function_ invoke__">urlencode</span>(<span class="variable">$str</span>); <span class="comment">//如果直接echo $str 可能会因为protected以及pravite的存在使得一些东西是没有被显示的，比如%00。所以此时进行urlencode就很好了，或者我们直接把protected以及private改为public也可以喵~</span></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$str</span>; <span class="comment">//（1）</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$str2</span>;</span><br><span class="line"><span class="comment">//反序列化</span></span><br><span class="line"><span class="variable">$a2</span> = <span class="title function_ invoke__">unserialize</span>(<span class="variable">$str</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">var_dump</span>(<span class="variable">$a2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在网页中打印的字符：</p>
+<p>（1）O:1:”A”:3:{s:4:”var1”;s:5:”hello”;s:7:”*var2”;s:3:”tom”;s:7:”Avar3”;i:5;} （这一整个是对象喵，</p>
+<p>属性是对象的一部分喵）</p>
+<p>note：</p>
+<table>
+<thead>
+<tr>
+<th>访问修饰符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public成员变量直接写</td>
+</tr>
+<tr>
+<td>protected成员变量前面要加%00*%00(经过URL编码)，%00是不可打印字符，所以这也是{}中第二个字符串长度为7 的原因</td>
+</tr>
+<tr>
+<td>pravite成员变量前面要加上%00类名%00(这里类名为A)</td>
+</tr>
+</tbody></table>
+<h3 id="类中的魔法方法"><a href="#类中的魔法方法" class="headerlink" title="类中的魔法方法"></a>类中的魔法方法</h3><h5 id="魔术方法是什么喵？"><a href="#魔术方法是什么喵？" class="headerlink" title="魔术方法是什么喵？"></a>魔术方法是什么喵？</h5><p>官方一点：在 PHP 中，以两个下划线 <code>__</code> 开头的方法被称为“魔术方法”。它们是一些特殊的方法，<strong>不会被你显式地调用</strong>，而是在满足特定条件或发生特定事件时，由 <strong>PHP 自动触发执行</strong>的。</p>
+<p><del>看不懂是干啥的对吧，我也看不懂</del></p>
+<p>我说白了➡_➡：魔术方法的作用就是 我想干点啥（比如我想创建一个对象，我输入new A() ,php引擎就知道我想要干啥，他自己调用一个魔术方法（即__construct（）函数）帮我干了这件事，而这个方法可以是我<strong>自己定义</strong>的【个人理解，如有错误以后会更改的QAQ】</p>
+<h5 id="常用的魔术方法喵-（其实还有好多，这里先了解这四个）"><a href="#常用的魔术方法喵-（其实还有好多，这里先了解这四个）" class="headerlink" title="常用的魔术方法喵~（其实还有好多，这里先了解这四个）"></a>常用的魔术方法喵~（其实还有好多，这里先了解这四个）</h5><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>__construct()</code> 函数</td>
+<td>一个对象被创建时被调用</td>
+</tr>
+<tr>
+<td><code>__destruct()</code> 函数</td>
+<td>一个对象被销毁时被调用（在整个php代码结束的时候）</td>
+</tr>
+<tr>
+<td><code>__toString()</code> 函数</td>
+<td>当一个对象被当作字符串来使用时会被调用（常见场景：使用echo或print的时候被调用）</td>
+</tr>
+<tr>
+<td><code>__wakeup()</code>函数</td>
+<td><del>当一个对象通过 <code>unserialize()</code> 函数被“反序列化”（唤醒）时被调用</del>   好官方➡_➡其实就是在<code>unserialize()</code>一个对象之前被调用</td>
+</tr>
+</tbody></table>
+<p><strong>！<strong>注意：1）__toString()函数是有返回值的，必须返回一个string（字符串）类型的值。如果打印的是一个对象，就会输出 <code>__toString()</code> 方法</strong>返回的那个字符串</strong></p>
+<p>2）toString()函数和wakeup()函数的访问修饰符必须为public</p>
+<p><strong>SO,到现在也看不懂魔术方法能干什么对叭➡_➡，我也不知道，往下看看呢？</strong></p>
+<p>e.g.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 将 &quot;name&quot; 属性的值赋给 $func 变量</span></span><br><span class="line">    <span class="variable">$func</span> = <span class="variable language_">$this</span>-&gt;name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 将 $func 变量作为函数名来调用，</span></span><br><span class="line">    <span class="comment">//    并将 &quot;age&quot; 属性的值作为参数传递给这个函数</span></span><br><span class="line">    <span class="variable">$func</span>(<span class="variable language_">$this</span>-&gt;age); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>look at this ➡_➡</p>
+<p><strong>这段代码是什么意思呢？它实现了一个“动态函数调用”。</strong></p>
+<p>它把储存在对象属性 <code>name</code> 里的<strong>字符串</strong>，当作一个<strong>函数的名字</strong>。</p>
+<p>然后，它调用这个函数，并把 <code>age</code> 属性的值当作参数。</p>
+<p>所以，试想一下，如果我把<code>name</code>里的值定为<code>system</code>；</p>
+<p>再把<code>age</code>属性的值定位<code>ls /</code>(或者 <code>cat /flag</code>, <code>whoami</code> 等任意命令)</p>
+<p>即</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">$this</span>-&gt;name = <span class="string">&quot;system&quot;</span>;</span><br><span class="line"><span class="variable language_">$this</span>-&gt;age = <span class="string">&quot;ls /&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>那么上面那段代码就等价于</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// $func 变成了 &quot;system&quot;</span></span><br><span class="line"><span class="variable">$func</span> = <span class="string">&quot;system&quot;</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// $func($this-&gt;age) </span></span><br><span class="line"><span class="comment">// 实际上就等于调用：</span></span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="string">&quot;ls /&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>system(&quot;ls /&quot;);</code> 有什么作用不言而喻了吧？</p>
+<p>是不是对魔术方法如何使用有一点点的了解了呢？<strong>QwQ</strong>（今天就写到这叭，晚安喵）</p>
+
     </div>
     <footer class="article-footer">
-        <a data-aos="zoom-in" href="/about/index.html#comments" class="article-comment-link">
-          <span class="post-comments-count valine-comment-count" data-xid="/about/" itemprop="commentCount"></span>
+        <a data-aos="zoom-in" href="/2025/11/11/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2025/11/11/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" itemprop="commentCount"></span>
           Comments
         </a>
-        <span data-aos="zoom-in" id="/about/" class="leancloud_visitors article-visitor-link" data-flag-title="关于">
+        <span data-aos="zoom-in" id="/2025/11/11/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" class="leancloud_visitors article-visitor-link" data-flag-title="web学习笔记之反序列化喵">
           <span class="leancloud-visitors-count">0</span>
           <em class="post-meta-item-text">Readings</em>
         </span>
-      
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag" title="Web安全">Web安全</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag" title="反序列化">反序列化</a></li></ul>
+
     </footer>
   </div>
-  
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    <div class="article-nav-link-wrap right">
+          <img data-src="https://d-sketon.top/img/_backwebp/bg1.webp" data-sizes="auto" alt="Hello World" class="lazyload">
+      <a href="/2025/11/05/hello-world/" aria-label="Next: Hello World"  title="Next: Hello World"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+          Hello World
+      </h3>
+    </div>
+  </nav>
+
 </article>
 
   <section id="comments" data-aos="fade-up">
@@ -299,7 +392,12 @@
       </div>
       <nav id="mobile-nav" aria-label="Mobile navigation">
   <div class="sidebar-wrap">
-      <div class="sidebar-author">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%86%99%E7%9B%AE%E5%89%8D%E5%AD%A6%E5%88%B0%E7%9A%84%E5%96%B5-%EF%BC%8C%E4%B9%8B%E5%89%8D%E7%9A%84%E5%90%8E%E9%9D%A2%E4%BC%9A%E8%A1%A5%E4%B8%8A%E7%9A%84%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">(先写目前学到的喵~，之前的后面会补上的）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%98%AF%E4%BB%80%E4%B9%88%E5%96%B5%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">反序列化是什么喵？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B0%E7%BB%84"><span class="toc-number">1.2.</span> <span class="toc-text">序列化数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.</span> <span class="toc-text">序列化对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E4%B8%AD%E7%9A%84%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">类中的魔法方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95%E6%98%AF%E4%BB%80%E4%B9%88%E5%96%B5%EF%BC%9F"><span class="toc-number">1.4.1.</span> <span class="toc-text">魔术方法是什么喵？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95%E5%96%B5-%EF%BC%88%E5%85%B6%E5%AE%9E%E8%BF%98%E6%9C%89%E5%A5%BD%E5%A4%9A%EF%BC%8C%E8%BF%99%E9%87%8C%E5%85%88%E4%BA%86%E8%A7%A3%E8%BF%99%E5%9B%9B%E4%B8%AA%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">常用的魔术方法喵~（其实还有好多，这里先了解这四个）</span></a></li></ol></li></ol></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
   <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
   <div class="sidebar-author-name">Gloria</div>
   <div class="sidebar-description"></div>
@@ -350,8 +448,12 @@
         <div class="sidebar-menu-link">Friend</div>
       </div>
 </div>
-
+</div>
   </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
 </nav>
 
     </div>
@@ -412,14 +514,14 @@
       <script data-pjax>
         window.REIMU_POST = {
           author: "Gloria",
-          title: "关于",
-          url: "http://example.com/about/index.html",
+          title: "web学习笔记之反序列化喵",
+          url: "http://example.com/2025/11/11/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/",
           excerpt: "",
           description: "",
-          stripContent: "关于",
-          date: "Wed Sep 22 2021 21:01:47 GMT+0800",
-          updated: "Fri Nov 07 2025 00:00:14 GMT+0800",
-          cover: "/images/banner.webp",
+          stripContent: "(先写目前学到的喵~，之前的后面会补上的）[TOC] 反序列化是什么喵？序列化数组序列化对象序列化时，只保存成员变量，不保存方法 123456789101112131415161718192021&amp;lt;? php    class A&amp;#123;    public $var1; //访问修饰符public，下面同理    protected $var2;    private $var3;    function __construct($var1,$var2,$var3)&amp;#123;   ",
+          date: "Tue Nov 11 2025 16:23:17 GMT+0800",
+          updated: "Tue Nov 11 2025 23:44:23 GMT+0800",
+          cover: "/images/1.jpg",
         };
       </script>
         
