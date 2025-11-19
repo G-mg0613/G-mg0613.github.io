@@ -9,7 +9,7 @@
   
   <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_4k4bc36ef96';window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'http://example.com';</script>
   <title>
-    关于 | Dawn
+    web学习笔记之命令执行喵 | Dawn
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
@@ -17,19 +17,22 @@
     
 <link rel="stylesheet" href="/css/loader.css">
 
-    <meta name="description" content="关于">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="http://example.com/about/index.html">
+    <meta name="description" content="web学习笔记之命令执行喵[TOC] 常见命令在windows下面连接两条命令   符号 作用    | 直接执行后面的语句，无论前面的命令为真为假（如ping www.XXXX.com|whoami，会显示当前的用户名）【涉及数据传输，即将前一个命令的输出（STDOUT）作为后一个命令的输入（STDIN）】   || 如果前面的语句执行出错（命令为假），则执行后面的；若没出错，则执行前面的（如p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web学习笔记之命令执行喵">
+<meta property="og:url" content="http://example.com/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/index.html">
 <meta property="og:site_name" content="Dawn">
-<meta property="og:description" content="关于">
+<meta property="og:description" content="web学习笔记之命令执行喵[TOC] 常见命令在windows下面连接两条命令   符号 作用    | 直接执行后面的语句，无论前面的命令为真为假（如ping www.XXXX.com|whoami，会显示当前的用户名）【涉及数据传输，即将前一个命令的输出（STDOUT）作为后一个命令的输入（STDIN）】   || 如果前面的语句执行出错（命令为假），则执行后面的；若没出错，则执行前面的（如p">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/banner.webp">
-<meta property="article:published_time" content="2021-09-22T13:01:47.000Z">
-<meta property="article:modified_time" content="2025-11-06T16:00:14.083Z">
+<meta property="og:image" content="http://example.com/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/111.png">
+<meta property="og:image" content="http://example.com/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/222.png">
+<meta property="article:published_time" content="2025-11-16T08:59:17.000Z">
+<meta property="article:modified_time" content="2025-11-19T13:34:54.359Z">
 <meta property="article:author" content="Gloria">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="命令执行">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/banner.webp">
+<meta name="twitter:image" content="http://example.com/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/111.png">
     <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -127,13 +130,12 @@
   </nav>
 </div>
 <header id="header" aria-label="Site header">
-      <picture>
-      </picture>
-        <img  fetchpriority="high" src="/images/banner.webp" alt="关于">
+    <picture></picture>
+    <img  fetchpriority="high" src="/images/4.jpg" alt="web学习笔记之命令执行喵">
   <div id="header-outer">
     <div id="header-title">
           <span id="logo">
-            <h1 data-aos="slide-up">关于</h1>
+            <h1 data-aos="slide-up">web学习笔记之命令执行喵</h1>
           </span>
         <h2 id="subtitle-wrap" data-aos="slide-down">
         </h2>
@@ -143,10 +145,15 @@
 
         <div id="content" aria-label="Page content" class="sidebar-left"  >
           <aside id="sidebar" aria-label="Sidebar">
-  <div class="sidebar-wrapper-container ">
+  <div class="sidebar-wrapper-container sticky">
   <div class="sidebar-wrapper">
     <div class="sidebar-wrap" data-aos="fade-up">
-        <div class="sidebar-author">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web学习笔记之命令执行喵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.</span> <span class="toc-text">常见命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8windows%E4%B8%8B%E9%9D%A2%E8%BF%9E%E6%8E%A5%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">在windows下面连接两条命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8linux%E4%B8%8B%E9%9D%A2%E8%BF%9E%E6%8E%A5%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.2.</span> <span class="toc-text">在linux下面连接两条命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.</span> <span class="toc-text">空格绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D%E7%BB%95%E8%BF%87%EF%BC%88%E6%84%9F%E8%A7%89%E7%B1%BB%E4%BC%BC%E9%BB%91%E5%90%8D%E5%8D%95%E7%BB%95%E8%BF%87%E5%93%8E%E2%80%A6%EF%BC%9F%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">关键词绕过（感觉类似黑名单绕过哎…？）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OK-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%85%88%E5%88%B0%E8%BF%99%E9%87%8C%E5%96%B5-Gloria%E4%BC%9A%E5%8E%BB%E6%89%BE%E5%87%A0%E9%81%93%E9%A2%98%E7%BB%83%E7%BB%83%E6%89%8B%E7%9A%84%E5%96%B5"><span class="toc-number">1.4.</span> <span class="toc-text">OK,命令执行先到这里喵~Gloria会去找几道题练练手的喵</span></a></li></ol></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
   <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
   <div class="sidebar-author-name">Gloria</div>
   <div class="sidebar-description"></div>
@@ -197,7 +204,11 @@
         <div class="sidebar-menu-link">Friend</div>
       </div>
 </div>
-
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
     </div>
   </div>
   <div class="sidebar-widget">
@@ -205,37 +216,176 @@
   </div>
 </aside>
 
-          <section id="main" aria-label="Main content"><article id="page-" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+          <section id="main" aria-label="Main content"><article id="post-web学习笔记之命令执行喵" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-inner" data-aos="fade-up">
     <div class="article-meta">
       <div class="article-date">
   <span class="article-date-link icon-calendar" data-aos="zoom-in">
-    <time datetime="2021-09-22T13:01:47.000Z" itemprop="datePublished">2021-09-22</time>
-    <time style="display: none;" id="post-update-time">2025-11-07</time>
+    <time datetime="2025-11-16T08:59:17.000Z" itemprop="datePublished">2025-11-16</time>
+    <time style="display: none;" id="post-update-time">2025-11-19</time>
   </span>
 </div>
 
-      
+        <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="学习笔记">学习笔记</a>
+  </div>
+
     </div>
     
     <div class="hr-line"></div>
     
     <div class="e-content article-entry" itemprop="articleBody">
-        <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2>
+        <h2 id="web学习笔记之命令执行喵"><a href="#web学习笔记之命令执行喵" class="headerlink" title="web学习笔记之命令执行喵"></a>web学习笔记之命令执行喵</h2><p>[TOC]</p>
+<h3 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h3><h4 id="在windows下面连接两条命令"><a href="#在windows下面连接两条命令" class="headerlink" title="在windows下面连接两条命令"></a>在windows下面连接两条命令</h4><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>|</td>
+<td>直接执行后面的语句，无论前面的命令为真为假（如ping <a href="http://www.XXXX.com|whoami，会显示当前的用户名）【涉及数据传输，即将前一个命令的输出（STDOUT）作为后一个命令的输入（STDIN）】">www.XXXX.com|whoami，会显示当前的用户名）【涉及数据传输，即将前一个命令的输出（STDOUT）作为后一个命令的输入（STDIN）】</a></td>
+</tr>
+<tr>
+<td>||</td>
+<td>如果前面的语句执行出错（命令为假），则执行后面的；若没出错，则执行前面的（如ping 2||whoami，会显示当前的用户名）</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>前面的语句可真可假，都执行后面的命令（如ping 2&amp;whoami）</td>
+</tr>
+<tr>
+<td>&amp;&amp;</td>
+<td>前面语句为真时，才执行后面的语句（如ping <a target="_blank" rel="noopener" href="http://www.xxxx.com/">www.XXXX.com</a> &amp;&amp; whoami）</td>
+</tr>
+</tbody></table>
+<h4 id="在linux下面连接两条命令"><a href="#在linux下面连接两条命令" class="headerlink" title="在linux下面连接两条命令"></a>在linux下面连接两条命令</h4><table>
+<thead>
+<tr>
+<th>符 号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>|</td>
+<td>管道符，两个命令都执行（如ping -c 4 127.0.0.1 | whoami）【这里的“-c 4”是指要ping 4次，不然会一直ping下去】【涉及数据传输，即将前一个命令的输出（STDOUT）作为后一个命令的输入（STDIN），所以这里不显示第一个命令的输出，只显示第二个】</td>
+</tr>
+<tr>
+<td>||</td>
+<td>如果前面的语句执行出错（命令为假），则执行后面的；若没出错，则执行前面的</td>
+</tr>
+<tr>
+<td>；</td>
+<td>执行完前面的命令就执行后面的命令（如ping -c 4 127.0.0.1；whoami）</td>
+</tr>
+<tr>
+<td>&amp;&amp;</td>
+<td>前面语句为真时，才执行后面的语句（如ping -c 4 127.0.0.1 &amp;&amp; whoami）</td>
+</tr>
+</tbody></table>
+<p>所以，到底怎么用啊歪！！！＞︿＜</p>
+<p>不管了，上栗子~（题目来源于learnctf，侵权删）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">highlight_file(__FILE__);</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&#x27;ip&#x27;])) &#123;</span><br><span class="line">    $ip = $_GET[&#x27;ip&#x27;];</span><br><span class="line">    $output = shell_exec(&#x27;ping -c 3 &#x27; . $ip);</span><br><span class="line">    echo &quot;&lt;pre&gt;&quot; . $output . &quot;&lt;/pre&gt;&quot;;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    die(&#x27;?ip=&#x27;);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">?ip=</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析：</strong></p>
+<p>1）来看这一段代码<code>$output = shell_exec(&#39;ping -c 3 &#39; . $ip);</code>，这里将ping -c 3和输入的$ip直接拼接字符串，并且使用 <code>shell_exec</code>命令，会导致PHP拼接命令并在服务器上执行。</p>
+<p>2）如果我传入?ip&#x3D;127.0.0.1;ls，那么PHP会将其拼接成<code>ping -c 3 127.0.0.1;ls</code>，服务器会先回环，再执行ls查看当前目录</p>
+<p>3）然后我再将ls改为ls &#x2F;,查看根目录，再改为cat &#x2F;flag.php（如果flag藏在flag.php里）等等。就这样一步一步，就可以得到flag了喵~</p>
+<img src="/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/111.png" class="" title="图片正常显示了喵~">
+
+<p>总结一下，这些管道符的作用，其实就是在满足题目要求之余，通过拼接满足我自身的要求（拿到心爱的flag！！！）</p>
+<h3 id="空格绕过"><a href="#空格绕过" class="headerlink" title="空格绕过"></a>空格绕过</h3><p>网站怎么可能让Gloria这么容易获得flag呢o(一︿一+)o，通常会加一些限制，比如这里的空格绕过。 </p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$IFS$1</td>
+<td>$IFS是linux中一个内置的变量，是一个分隔符（可将其看成一个空格）；$1是命令行传进来的第一个参数，因为不在脚本中执行（相当于一个空字符串）</td>
+</tr>
+<tr>
+<td>{cat,flag}</td>
+<td>&#x2F;</td>
+</tr>
+<tr>
+<td>cat&lt;flag</td>
+<td>“&lt;”表示输入重定向，即把flag这个文件内容传给cat命令去显示</td>
+</tr>
+<tr>
+<td>cat&lt;&gt;flag</td>
+<td>也是一种重定向的方式</td>
+</tr>
+</tbody></table>
+<p>这里只是稍微改一下请求，就不贴例题了（步骤跟上面完全一样</p>
+<h3 id="关键词绕过（感觉类似黑名单绕过哎…？）"><a href="#关键词绕过（感觉类似黑名单绕过哎…？）" class="headerlink" title="关键词绕过（感觉类似黑名单绕过哎…？）"></a>关键词绕过（感觉类似黑名单绕过哎…？）</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>变量拼接</td>
+<td>a&#x3D;fl;b&#x3D;ag;cat $a$b (注意这里a和&#x3D;之间、&#x3D;和fl之间不可以有空格)</td>
+</tr>
+<tr>
+<td>反引号</td>
+<td>反引号表示执行一条命令，并把结果显示出来（如echo “111`whoami`222”得到的是111Gloria222；如果反引号中间的命令无法执行，那么它就会变成一个空字符串，如echo “111`dthrd`222”，系统会报错，并输出111222）</td>
+</tr>
+<tr>
+<td>反斜杠</td>
+<td>\是转义符（如cat f\lag，但是flag没有什么好转义的，所以还是输入了cat flag）</td>
+</tr>
+<tr>
+<td>引号</td>
+<td>单引号：如cat f’l’ag；双引号：如cat f”l”ag</td>
+</tr>
+<tr>
+<td>编码绕过</td>
+<td>使用base64（以cat flag为例，输入&#96;echo Y2F0IGZsYWc&#x3D;</td>
+</tr>
+</tbody></table>
+<p>emmm…还是来看一道小题叭（￣︶￣）↗　</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;ip&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$ip</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;ip&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/ /&#x27;</span>, <span class="variable">$ip</span>)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;不能有空格&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/flag/&#x27;</span>, <span class="variable">$ip</span>)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;不能有flag&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/=/&#x27;</span>, <span class="variable">$ip</span>)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;不能有=&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$output</span> = <span class="title function_ invoke__">shell_exec</span>(<span class="string">&#x27;ping -c 3 &#x27;</span> . <span class="variable">$ip</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;pre&gt;&quot;</span> . <span class="variable">$output</span> . <span class="string">&quot;&lt;/pre&gt;&quot;</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;?ip=&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>无非就是管道符、空格绕过、关键词绕过三个都考了一下</p>
+<p>这里空格➡$ISF$1</p>
+<p>不能有&#x3D;说明在考虑关键词绕过的时候base64被ban掉了,并且变量拼接也被ban掉了，所以去考虑反引号、反斜杠之类的</p>
+<p>我们先使用<code>?ip=127.0.0.1;ls$IFS$1/</code>查找到flag_b54ef9446.txt</p>
+<p>再使用<code>?ip=127.0.0.1;cat$IFS$1/fl\ag_b54ef9446.txt</code>，获得flag</p>
+<img src="/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/222.png" class="" title="图片正常显示了喵~">
+
+<h3 id="OK-命令执行先到这里喵-Gloria会去找几道题练练手的喵"><a href="#OK-命令执行先到这里喵-Gloria会去找几道题练练手的喵" class="headerlink" title="OK,命令执行先到这里喵~Gloria会去找几道题练练手的喵"></a>OK,命令执行先到这里喵~Gloria会去找几道题练练手的喵</h3><p><strong>应该是会写另一篇做题的博客的（应该➡_➡</strong></p>
+
     </div>
     <footer class="article-footer">
-        <a data-aos="zoom-in" href="/about/index.html#comments" class="article-comment-link">
-          <span class="post-comments-count valine-comment-count" data-xid="/about/" itemprop="commentCount"></span>
+        <a data-aos="zoom-in" href="/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/" itemprop="commentCount"></span>
           Comments
         </a>
-        <span data-aos="zoom-in" id="/about/" class="leancloud_visitors article-visitor-link" data-flag-title="关于">
+        <span data-aos="zoom-in" id="/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/" class="leancloud_visitors article-visitor-link" data-flag-title="web学习笔记之命令执行喵">
           <span class="leancloud-visitors-count">0</span>
           <em class="post-meta-item-text">Readings</em>
         </span>
-      
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag" title="Web安全">Web安全</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" rel="tag" title="命令执行">命令执行</a></li></ul>
+
     </footer>
   </div>
-  
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    <div class="article-nav-link-wrap right">
+        <img data-src="/images/2.jpg" data-sizes="auto" alt="web学习笔记之暴力破解喵" class="lazyload">
+      <a href="/2025/11/15/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/" aria-label="Next: web学习笔记之暴力破解喵"  title="Next: web学习笔记之暴力破解喵"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+          web学习笔记之暴力破解喵
+      </h3>
+    </div>
+  </nav>
+
 </article>
 
   <section id="comments" data-aos="fade-up">
@@ -299,7 +449,12 @@
       </div>
       <nav id="mobile-nav" aria-label="Mobile navigation">
   <div class="sidebar-wrap">
-      <div class="sidebar-author">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web学习笔记之命令执行喵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.</span> <span class="toc-text">常见命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8windows%E4%B8%8B%E9%9D%A2%E8%BF%9E%E6%8E%A5%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">在windows下面连接两条命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8linux%E4%B8%8B%E9%9D%A2%E8%BF%9E%E6%8E%A5%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.2.</span> <span class="toc-text">在linux下面连接两条命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.</span> <span class="toc-text">空格绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D%E7%BB%95%E8%BF%87%EF%BC%88%E6%84%9F%E8%A7%89%E7%B1%BB%E4%BC%BC%E9%BB%91%E5%90%8D%E5%8D%95%E7%BB%95%E8%BF%87%E5%93%8E%E2%80%A6%EF%BC%9F%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">关键词绕过（感觉类似黑名单绕过哎…？）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OK-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%85%88%E5%88%B0%E8%BF%99%E9%87%8C%E5%96%B5-Gloria%E4%BC%9A%E5%8E%BB%E6%89%BE%E5%87%A0%E9%81%93%E9%A2%98%E7%BB%83%E7%BB%83%E6%89%8B%E7%9A%84%E5%96%B5"><span class="toc-number">1.4.</span> <span class="toc-text">OK,命令执行先到这里喵~Gloria会去找几道题练练手的喵</span></a></li></ol></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
   <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
   <div class="sidebar-author-name">Gloria</div>
   <div class="sidebar-description"></div>
@@ -350,8 +505,12 @@
         <div class="sidebar-menu-link">Friend</div>
       </div>
 </div>
-
+</div>
   </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
 </nav>
 
     </div>
@@ -412,14 +571,14 @@
       <script data-pjax>
         window.REIMU_POST = {
           author: "Gloria",
-          title: "关于",
-          url: "http://example.com/about/index.html",
+          title: "web学习笔记之命令执行喵",
+          url: "http://example.com/2025/11/16/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%96%B5/",
           excerpt: "",
           description: "",
-          stripContent: "关于",
-          date: "Wed Sep 22 2021 21:01:47 GMT+0800",
-          updated: "Fri Nov 07 2025 00:00:14 GMT+0800",
-          cover: "/images/banner.webp",
+          stripContent: "web学习笔记之命令执行喵[TOC] 常见命令在windows下面连接两条命令   符号 作用    | 直接执行后面的语句，无论前面的命令为真为假（如ping www.XXXX.com|whoami，会显示当前的用户名）【涉及数据传输，即将前一个命令的输出（STDOUT）作为后一个命令的输入（STDIN）】   || 如果前面的语句执行出错（命令为假），则执行后面的；若没出错，则执行前面的（如ping 2||whoami，会显示当前的用户名）   &amp;amp; 前面的语句可真可假，都执行后面的命",
+          date: "Sun Nov 16 2025 16:59:17 GMT+0800",
+          updated: "Wed Nov 19 2025 21:34:54 GMT+0800",
+          cover: "/images/4.jpg",
         };
       </script>
         
