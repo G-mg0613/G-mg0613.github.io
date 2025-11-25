@@ -1,0 +1,805 @@
+  <!DOCTYPE html>
+  <html lang="en"  
+      data-theme-mode="auto"
+  >
+  <head>
+  <meta charset="utf-8">
+  
+  
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_4k4bc36ef96';window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'http://example.com';</script>
+  <title>
+    ISCTF2024 web做题日记喵 | Dawn
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+    <meta name="description" content="ISCTF2024 Web做题日记喵[TOC] 1.0 1z_php题目描述：一句话木马都有了，还要什么自行车 难度：签到 12345678910111213141516 &lt;?phphighlight_file(&#x27;index.php&#x27;);#一句话木马，神神又奇奇if(isset($_POST[&#x27;J&#x27;]))&#123;    $call&#x3D;$_POST[&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ISCTF2024 web做题日记喵">
+<meta property="og:url" content="http://example.com/2025/11/25/ISCTF2024-web/index.html">
+<meta property="og:site_name" content="Dawn">
+<meta property="og:description" content="ISCTF2024 Web做题日记喵[TOC] 1.0 1z_php题目描述：一句话木马都有了，还要什么自行车 难度：签到 12345678910111213141516 &lt;?phphighlight_file(&#x27;index.php&#x27;);#一句话木马，神神又奇奇if(isset($_POST[&#x27;J&#x27;]))&#123;    $call&#x3D;$_POST[&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/11111.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/22222.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/33333.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/44444.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/55555.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/66666.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/77777.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/88888.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/99999.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/10.png">
+<meta property="og:image" content="http://example.com/2025/11/25/ISCTF2024-web/11.png">
+<meta property="article:published_time" content="2025-11-25T12:50:21.000Z">
+<meta property="article:modified_time" content="2025-11-25T16:08:36.510Z">
+<meta property="article:author" content="Gloria">
+<meta property="article:tag" content="Web安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/11/25/ISCTF2024-web/11111.png">
+    <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" integrity="sha384-IfxC36XL&#x2F;toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx&#x2F;1oA&#x2F;0l8ysE" crossorigin="anonymous">
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css" integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+  <body>
+      <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+      </div>
+      <div class="loading-word">Loading...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+        <a class="main-nav-link-wrap" href="/">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Home</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/archives">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Archives</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/about">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">About</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/friend">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Friend</span>
+        </span>
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed" aria-label="RSS Feed" target="_blank"></a>
+  </nav>
+</div>
+<header id="header" aria-label="Site header">
+    <picture></picture>
+    <img  fetchpriority="high" src="/images/7.jpg" alt="ISCTF2024 web做题日记喵">
+  <div id="header-outer">
+    <div id="header-title">
+          <span id="logo">
+            <h1 data-aos="slide-up">ISCTF2024 web做题日记喵</h1>
+          </span>
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+        </h2>
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content" class="sidebar-left"  >
+          <aside id="sidebar" aria-label="Sidebar">
+  <div class="sidebar-wrapper-container sticky">
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ISCTF2024-Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">ISCTF2024 Web做题日记喵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-0-1z-php"><span class="toc-number">1.1.</span> <span class="toc-text">1.0 1z_php</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-0-25%E6%97%B6%E6%99%93%E5%B1%B1%E7%91%9E%E5%B8%8C%E7%94%9F%E6%97%A5%E4%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">2.0 25时晓山瑞希生日会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-0-ezrce"><span class="toc-number">1.3.</span> <span class="toc-text">3.0 ezrce</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-0-%E5%B0%8F%E8%93%9D%E9%B2%A8%E7%9A%84%E5%86%92%E9%99%A9"><span class="toc-number">1.4.</span> <span class="toc-text">4.0 小蓝鲨的冒险</span></a></li></ol></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">8</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">6</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+    </div>
+  </div>
+  <div class="sidebar-widget">
+  </div>
+  </div>
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-ISCTF2024-web" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2025-11-25T12:50:21.000Z" itemprop="datePublished">2025-11-25</time>
+    <time style="display: none;" id="post-update-time">2025-11-26</time>
+  </span>
+</div>
+
+        <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0/" title="做题日记">做题日记</a>
+  </div>
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+        <h2 id="ISCTF2024-Web做题日记喵"><a href="#ISCTF2024-Web做题日记喵" class="headerlink" title="ISCTF2024 Web做题日记喵"></a>ISCTF2024 Web做题日记喵</h2><p>[TOC]</p>
+<h3 id="1-0-1z-php"><a href="#1-0-1z-php" class="headerlink" title="1.0 1z_php"></a>1.0 1z_php</h3><p><strong>题目描述</strong>：一句话木马都有了，还要什么自行车</p>
+<p><strong>难度</strong>：签到</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="string">&#x27;index.php&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#一句话木马，神神又奇奇</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;J&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$call</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;J&#x27;</span>];</span><br><span class="line">    <span class="variable">$dangerous_commands</span> = [<span class="string">&#x27;cat&#x27;</span>, <span class="string">&#x27;tac&#x27;</span>, <span class="string">&#x27;head&#x27;</span>, <span class="string">&#x27;nl&#x27;</span>, <span class="string">&#x27;more&#x27;</span>, <span class="string">&#x27;less&#x27;</span>, <span class="string">&#x27;tail&#x27;</span>, <span class="string">&#x27;vi&#x27;</span>, <span class="string">&#x27;sed&#x27;</span>, <span class="string">&#x27;od&#x27;</span>];</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$dangerous_commands</span> <span class="keyword">as</span> <span class="variable">$command</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/<span class="subst">$command</span>/i&quot;</span>, <span class="variable">$call</span>)) &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;这些个危险函数可不兴使啊&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_ invoke__">system</span>(<span class="variable">$call</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p><strong>做题步骤</strong>：</p>
+<p>1）遇到这道题，首先肯定要去找falg到底储存在哪里，所以利用<code>system($call);</code>先POST一个<code>J=ls</code>以及<code>J=ls /</code></p>
+<p>(其实已经找到flag了，<del>但是Gloria眼瞎没看见QAQ</del>，这里顺便讲一讲其他查找flag的方法，方便以后用到)</p>
+<p>2）所以我们改用：</p>
+<p><code>J=ls -al/</code>➡查找根目录中的所有文件</p>
+<p><code>J=find / -name &quot;flag*&quot;</code>➡查找所有跟flag相关的文件</p>
+<p><code>J=env</code>或者<code>J=printenv</code>➡flag很可能不是文件而且藏在环境变量里</p>
+<p>3）<strong>然后问了ai才知道flag有时候也会写成f14g</strong>➡_➡（Orz我孤陋寡闻了）</p>
+<p>这里只贴使用<code>J=ls /</code>找到f14g的图了，其他的不贴了…（有点小懒喵…♪(´▽｀)</p>
+<img src="/2025/11/25/ISCTF2024-web/11111.png" class="" title="图片正常显示了喵~">
+
+<p>4）下面只需要绕过一下黑名单就可以得到flag</p>
+<p>●<code>sort</code> 命令通常用来排序文本，但也能直接输出文件内容：<code>J=sort /f14g</code></p>
+<p>●利用 <code>\</code> 绕过 <code>preg_match</code> 对 <code>cat</code> 的过滤：<code>J=c\at /f14g</code></p>
+<p>●Base64 读取：<code>J=base64 /f14g</code></p>
+<p>●<code>J=uniq /f14g</code></p>
+<p>●<code>J=rev /f14g</code>（rev 读出来的内容是倒着的）</p>
+<p>成功（￣︶￣）↗　</p>
+<img src="/2025/11/25/ISCTF2024-web/22222.png" class="" title="图片正常显示了喵~">
+
+<h3 id="2-0-25时晓山瑞希生日会"><a href="#2-0-25时晓山瑞希生日会" class="headerlink" title="2.0 25时晓山瑞希生日会"></a>2.0 25时晓山瑞希生日会</h3><p><strong>题目描述</strong>：</p>
+<p>瑞希是神山高校一年级生，《25时，在Nightcord。》的MV师。马上要到生日了。生日会邀请了很多人来参加。<br>此题在9.15就出好了，谁料会发生如此变故，sega我恨你;w;</p>
+<p><strong>难度</strong>：签到</p>
+<img src="/2025/11/25/ISCTF2024-web/33333.png" class="" title="图片正常显示了喵~">
+
+<p><strong>做题步骤</strong>：</p>
+<p>1）哦➡_➡…好明显的提示，没什么好说的，bp抓包修改<strong>User-Agent</strong>为Project Sekai</p>
+<img src="/2025/11/25/ISCTF2024-web/44444.png" class="" title="图片正常显示了喵~">
+
+
+
+<p>2）提示<strong>本地</strong>，那更没啥好说的了，在请求头添加<strong>X-Forwarded-For</strong>为127.0.0.1</p>
+<img src="/2025/11/25/ISCTF2024-web/55555.png" class="" title="图片正常显示了喵~">
+
+<p>3）第三步，提示时间，中，那不就是在请求头中<strong>添加Date</strong>嘛</p>
+<p>因为题目说了是瑞希的生日，所以这道题结合了 <strong>Project Sekai (PJSK)</strong> 的游戏背景知识（<del>真是为难死我了</del></p>
+<p><strong>角色：</strong> 晓山瑞希 (Akiyama Mizuki)</p>
+<p><strong>关键线索：</strong> 生日会</p>
+<p><strong>瑞希的生日：</strong> 8月27日</p>
+<p>（这里date不太关注年份，所以先填了一个2023）</p>
+<img src="/2025/11/25/ISCTF2024-web/66666.png" class="" title="图片正常显示了喵~">
+
+<p>发现它提示太早了，再联系题目说是今年的生日会，所以改为了2025，并且提示是5点开始，所以把00:00:00改为了05:00:00</p>
+<img src="/2025/11/25/ISCTF2024-web/77777.png" class="" title="图片正常显示了喵~">
+
+<p>结果，又提示已经结束了➡_➡，好嘛，2025不行，2023也不行，所以尝试了一下2024，得到flag（还真让我给蒙出来了(<em>&#x2F;ω＼</em>)</p>
+<img src="/2025/11/25/ISCTF2024-web/88888.png" class="" title="图片正常显示了喵~">
+
+<h3 id="3-0-ezrce"><a href="#3-0-ezrce" class="headerlink" title="3.0 ezrce"></a>3.0 ezrce</h3><p><strong>题目描述</strong>：命令执行（哦吼~最近刚学，拿你试试手&lt;(￣︶￣)↗[GO!]）</p>
+<p><strong>难度</strong>：简单</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$cmd</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/flag|cat|ls|echo|php|bash|sh|more| |less|head|tail|[\|\&amp;\&gt;\&lt;]|eval|system|exec|popen|shell_exec/i&quot;</span>, <span class="variable">$cmd</span>)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Blocked by security filter!&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$cmd</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><del>你看你 又ban</del></p>
+<p><strong>步骤</strong>：</p>
+<p>1）正常流程，先找flag藏在哪（￣︶￣）↗　（不知道为什么用这些的，请看命令执行的做题日记喵~</p>
+<p><code>ls</code>被ban了，根本不慌，用<code>\</code>直接拿下</p>
+<p>空格被ban了，根本不慌，<code>%09</code>轻松拿下</p>
+<img src="/2025/11/25/ISCTF2024-web/99999.png" class="" title="图片正常显示了喵~">
+
+<p>2）这还有啥好说的，<code>cat</code>被ban了？谁家好人用<code>cat</code>啊？直接上<code>tac</code></p>
+<p>不让我写<code>flag</code>？谁怕你啊？<code>fl*</code>直接拿下你好吧</p>
+<img src="/2025/11/25/ISCTF2024-web/10.png" class="" title="图片正常显示了喵~">
+
+<h3 id="4-0-小蓝鲨的冒险"><a href="#4-0-小蓝鲨的冒险" class="headerlink" title="4.0 小蓝鲨的冒险"></a>4.0 小蓝鲨的冒险</h3><p><strong>题目描述</strong>：php特性，你能让小蓝鲨通关吗？</p>
+<p><strong>难度</strong>：简单</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$a</span> = <span class="string">&quot;isctf2024&quot;</span>;</span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$_GET</span>[<span class="string">&quot;b&quot;</span>];</span><br><span class="line">@<span class="title function_ invoke__">parse_str</span>(<span class="variable">$b</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;小蓝鲨开始闯关，你能帮助他拿到flag吗?&lt;br&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$a</span>[<span class="number">0</span>] != <span class="string">&#x27;QNKCDZO&#x27;</span> &amp;&amp; <span class="title function_ invoke__">md5</span>(<span class="variable">$a</span>[<span class="number">0</span>]) == <span class="title function_ invoke__">md5</span>(<span class="string">&#x27;QNKCDZO&#x27;</span>)) &#123;</span><br><span class="line">    <span class="variable">$num</span> = <span class="variable">$_POST</span>[<span class="string">&quot;num&quot;</span>];</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;第一关有惊无险！小蓝鲨壮着胆子接着继续往下走！&lt;br&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$num</span> == <span class="number">2024</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;QAQ小蓝鲨误入陷阱，不怕，再接再厉！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/[a-z]/i&quot;</span>, <span class="variable">$num</span>))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;陷阱太多QAQ&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$num</span>,<span class="number">0</span>) == <span class="number">2024</span>)&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;到这了难道还要放弃吗？&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;which&#x27;</span>]))&#123;</span><br><span class="line">            <span class="variable">$which</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;which&#x27;</span>];</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;小蓝鲨貌似在哪里见过这个陷阱O.o?继续加油，还差最后一步了！&quot;</span>;</span><br><span class="line">            <span class="keyword">switch</span> (<span class="variable">$which</span>)&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">print</span>(<span class="string">&#x27;QAQ&#x27;</span>);</span><br><span class="line">                <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">                    <span class="keyword">require_once</span> <span class="variable">$which</span>.<span class="string">&#x27;.php&#x27;</span>;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">echo</span> GWF_HTML::<span class="title function_ invoke__">error</span>(<span class="string">&#x27;PHP-0817&#x27;</span>, <span class="string">&#x27;Hacker NoNoNo!&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; 小蓝鲨开始闯关，你能帮助他拿到flag吗?</span><br></pre></td></tr></table></figure>
+
+<p>看着倒是挺复杂的，其实➡_➡…(抬手不是抱歉)</p>
+<p><strong>步骤</strong>：</p>
+<p>1）第一关</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="string">&quot;isctf2024&quot;</span>;</span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$_GET</span>[<span class="string">&quot;b&quot;</span>];</span><br><span class="line">@<span class="title function_ invoke__">parse_str</span>(<span class="variable">$b</span>); <span class="comment">//parse_str($b) 会把 GET 参数 b 当作查询字符串解析，并注册为变量。这意味着我们可以通过传递参数来覆盖代码中原有的变量 $a</span></span><br></pre></td></tr></table></figure>
+
+<p>来看这一段，再结合下面2），我们需要修改 <code>$a</code> 的值来通过下一关的校验</p>
+<p>2）第二关</p>
+<p><code>$a[0] != &#39;QNKCDZO&#39; &amp;&amp; md5($a[0]) == md5(&#39;QNKCDZO&#39;)</code>一眼就看到你了➡_➡，这是一个PHP弱比较（<strong>MD5弱比较</strong>）：</p>
+<p><strong>条件1</strong>：数组$a中的第一个元素（<code>$a[0]</code>）的值不等于字符串’QNKCDZO’</p>
+<p><strong>条件2</strong>：但是他们的MD5值必须相等</p>
+<p><strong>原理</strong>：<code>md5(&#39;QNKCDZO&#39;)</code>的结果是<code>0e830400...</code>，在php弱比较中，<strong>以0e开头并且后面跟的全是数字的字符串会被当作科学计数法0处理</strong></p>
+<p><strong>利用</strong>：所以，我们只需要找一个MD5也是0e开头，并且后面全是数字的字符串就可以，常用的碰撞字符串是<code>240610708</code></p>
+<p><strong>所以，我们就构造<code>?b=a[0]=240610708</code></strong></p>
+<p>3）第三关</p>
+<p>再往下看，POST进了一个num参数，并且num<strong>不能包含字母a到z而且不能等于2024</strong></p>
+<p>看我们发现了什么？<code>intval($num,0) == 2024</code></p>
+<p>老熟人了(｡･∀･)ﾉﾞ嗨</p>
+<p>intval($num, 0) &#x3D;&#x3D; 2024 表示：</p>
+<p>●将 $num 转换为整数，自动识别其进制<br>●使用弱类型比较判断是否等于 2024</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 十进制</span></span><br><span class="line"><span class="title function_ invoke__">intval</span>(<span class="string">&quot;2024&quot;</span>, <span class="number">0</span>)    <span class="comment">// 2024</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 八进制（以0开头）</span></span><br><span class="line"><span class="title function_ invoke__">intval</span>(<span class="string">&quot;03750&quot;</span>, <span class="number">0</span>)   <span class="comment">// 2024（八进制03740 = 十进制2024）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 十六进制（以0x或0X开头）</span></span><br><span class="line"><span class="title function_ invoke__">intval</span>(<span class="string">&quot;0x7e8&quot;</span>, <span class="number">0</span>)   <span class="comment">// 2024（十六进制0x7e8 = 十进制2024）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 二进制（以0b开头，PHP 5.4+）</span></span><br><span class="line"><span class="title function_ invoke__">intval</span>(<span class="string">&quot;0b11111101000&quot;</span>, <span class="number">0</span>) <span class="comment">// 2024</span></span><br></pre></td></tr></table></figure>
+
+<p>十进制、二进制、十六进制都被ban所以我们直接选八进制</p>
+<p><strong>构造POST参数：<code>num=03750</code></strong></p>
+<p>4）第四关</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;which&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$which</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;which&#x27;</span>];</span><br><span class="line">    <span class="keyword">switch</span> (<span class="variable">$which</span>)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">print</span>(<span class="string">&#x27;QAQ&#x27;</span>); <span class="comment">// 没有 break，会继续向下执行，哦吼~让我抓到了吧</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">require_once</span> <span class="variable">$which</span>.<span class="string">&#x27;.php&#x27;</span>; <span class="comment">// 文件包含</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们来看这里，我们需要执行 <code>require_once $which.&#39;.php&#39;</code> 来包含 flag 文件（通常文件名是 <code>flag.php</code>）</p>
+<p>但是如果我们传<code>which=1</code>，它只会包含 <code>1.php</code>（但1.php根本不存在）</p>
+<p>这看上去好像无解，但是➡</p>
+<p>PHP 的 <code>switch</code> 使用的是 <strong>弱比较 (<code>==</code>)</strong></p>
+<p><strong>PHP 7 及以下版本中，<code>字符串 &quot;flag&quot; == 数字 0</code> 是成立的（True）</strong></p>
+<p><strong>所以，我们传入<code>which=flag</code></strong></p>
+<p>这样就会匹配到<code>case 0</code>，而且，<strong><code>case 0</code>后面没有break</strong>，程序会继续执行（<strong>穿透</strong>）下去，进入 <code>case 1</code> 和 <code>case 2</code> 的代码块，进而执行我们需要执行的 <code>require_once $which.&#39;.php&#39;</code>，得到flag</p>
+<p>最终的payload：</p>
+<p>GET参数：<code>?b=a[0]=240610708&amp;which=flag</code></p>
+<p>POST参数：<code>num=03750</code></p>
+<img src="/2025/11/25/ISCTF2024-web/11.png" class="" title="图片正常显示了喵~">
+
+<p>先做到这…太晚了喵…各位晚安喵~(o-ωｑ)).oO 困</p>
+
+    </div>
+    <footer class="article-footer">
+        <a data-aos="zoom-in" href="/2025/11/25/ISCTF2024-web/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2025/11/25/ISCTF2024-web/" itemprop="commentCount"></span>
+          Comments
+        </a>
+        <span data-aos="zoom-in" id="/2025/11/25/ISCTF2024-web/" class="leancloud_visitors article-visitor-link" data-flag-title="ISCTF2024 web做题日记喵">
+          <span class="leancloud-visitors-count">0</span>
+          <em class="post-meta-item-text">Readings</em>
+        </span>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag" title="Web安全">Web安全</a></li></ul>
+
+    </footer>
+  </div>
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    <div class="article-nav-link-wrap right">
+        <img data-src="/images/9.jpg" data-sizes="auto" alt="Gloria的小秘密~谁也不知道" class="lazyload">
+      <a href="/2025/11/25/Gloria%E7%9A%84%E5%B0%8F%E7%A7%98%E5%AF%86/" aria-label="Next: Gloria的小秘密~谁也不知道"  title="Next: Gloria的小秘密~谁也不知道"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+          Gloria的小秘密~谁也不知道
+      </h3>
+    </div>
+  </nav>
+
+</article>
+
+  <section id="comments" data-aos="fade-up">
+    <div class="comment-header">
+        
+      <h2 class="comment-title">Leave a comment</h2>
+      <div class="comment-selector">
+        <div class="comment-selector-wrap">
+            <div class="selector-item" data-selector="valine">
+              <span>valine</span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="comment-content">
+        <div class="comment valine-comment" data-aos="fade-up"
+          id="valine-comment">
+        </div>
+    </div>
+  </section>
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    <div>
+      <span class="icon-copyright"></span>
+        2020-2025
+      <span class="footer-info-sep rotate"></span>
+      Gloria
+    </div>
+      <div>
+        Powered by&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+      <div>
+        <span class="icon-brush"></span>
+        12.5k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        00:58
+      </div>
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">Number of visits&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">Number of visitors&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+  </div>
+</footer>
+
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ISCTF2024-Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">ISCTF2024 Web做题日记喵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-0-1z-php"><span class="toc-number">1.1.</span> <span class="toc-text">1.0 1z_php</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-0-25%E6%97%B6%E6%99%93%E5%B1%B1%E7%91%9E%E5%B8%8C%E7%94%9F%E6%97%A5%E4%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">2.0 25时晓山瑞希生日会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-0-ezrce"><span class="toc-number">1.3.</span> <span class="toc-text">3.0 ezrce</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-0-%E5%B0%8F%E8%93%9D%E9%B2%A8%E7%9A%84%E5%86%92%E9%99%A9"><span class="toc-number">1.4.</span> <span class="toc-text">4.0 小蓝鲨的冒险</span></a></li></ol></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">8</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">6</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+  </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+</nav>
+
+    </div>
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.1.1/dist/index.umd.js" integrity="sha384-8LyaidD9GPxQQgLJO&#x2F;WRw&#x2F;O2h3BoNq&#x2F;ApI&#x2F;ecpvM6RsrCz2qP2ppBXUKihP4V&#x2F;2d" crossorigin="anonymous"></script>
+
+  <script>
+    if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+      window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'));
+    }
+  </script>
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Gloria",
+          title: "ISCTF2024 web做题日记喵",
+          url: "http://example.com/2025/11/25/ISCTF2024-web/",
+          excerpt: "",
+          description: "",
+          stripContent: "ISCTF2024 Web做题日记喵[TOC] 1.0 1z_php题目描述：一句话木马都有了，还要什么自行车 难度：签到 12345678910111213141516 &amp;lt;?phphighlight_file(&amp;#x27;index.php&amp;#x27;);#一句话木马，神神又奇奇if(isset($_POST[&amp;#x27;J&amp;#x27;]))&amp;#123;    $call=$_POST[&amp;#x27;J&amp;#x27;];    $dangerous_commands = [&amp;#x27;cat",
+          date: "Tue Nov 25 2025 20:50:21 GMT+0800",
+          updated: "Wed Nov 26 2025 00:08:36 GMT+0800",
+          cover: "/images/7.jpg",
+        };
+      </script>
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+        
+<script data-pjax>
+  var loadScript = (src, integrity) => {
+    const script = document.createElement('script');
+    script.src = src;
+    if (integrity) script.integrity = integrity;
+    script.crossOrigin = 'anonymous';
+    return script;
+  };
+
+  var commentConfigKeys = ["valine"];
+  var commentConfig = {
+    valine: {
+      enable: true,
+      load: () => {
+        const container = document.querySelector('.valine-comment');
+        if (!container) return;
+        if (container.style.display === 'block') return; // already loaded
+        container.style.display = 'block';
+
+        const script = loadScript(
+          'https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js',
+          'sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn'
+        );
+        script.onload = () => {
+          var GUEST_INFO = ['nick', 'mail', 'link'];
+          var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var recordIP = JSON.parse('true');
+          var highlight = JSON.parse('true');
+          var visitor = JSON.parse('true');
+          var serverURLs = undefined;
+
+          if (window.Valine) {
+            new Valine({
+              el: '.valine-comment',
+              appId: "kvVONbiLMyDuTRiZvZ1bTwdK-gzGzoHsz",
+              appKey: "3n0P97K1hXTVGGSYeh03GY57",
+              placeholder: "说点什么喵",
+              pageSize: '10',
+              avatar: 'mp',
+              lang: document.documentElement.lang || 'en',
+              recordIP: recordIP,
+              highlight: highlight,
+              visitor: visitor,
+              requiredFields: guest_info,
+              path: window.location.pathname,
+              serverURLs
+            });
+          }
+        };
+        document.head.appendChild(script);
+      }
+    },
+  }
+  commentConfig.enable = commentConfigKeys.some(key => commentConfig[key].enable);
+
+  var defaultComment = '';
+  if (commentConfig.enable) {
+    // 1. 首先检查localStorage中是否有保存的评论类型
+    var savedCommentType = localStorage.getItem('commentType');
+    
+    // 2. 如果localStorage中有值且对应的评论系统可用，就使用它
+    if (savedCommentType) {
+      if (commentConfig[savedCommentType]?.enable) {
+        defaultComment = savedCommentType;
+      }
+    }
+    
+    // 3. 如果localStorage无效，检查配置的默认评论系统
+    if (!defaultComment) {
+      var configDefault = 'waline';
+      if (commentConfig[configDefault]?.enable) {
+        defaultComment = configDefault;
+      }
+    }
+    
+    // 4. 如果前两项都无效，按指定顺序找到第一个可用的评论系统
+    if (!defaultComment) {
+      defaultComment = commentConfigKeys.find(sys => commentConfig[sys].enable) || '';
+    }
+  }
+  function loadComments() {
+    if (!commentConfig.enable) return;
+    const loadedComments = {
+      valine: false,
+      waline: false,
+      twikoo: false,
+      gitalk: false,
+      giscus: false
+    };
+
+    // 隐藏所有评论容器
+    const hideAllComments = () => {
+      const commentContainers = document.querySelectorAll('.comment');
+      commentContainers.forEach(container => {
+        container.style.display = 'none';
+      });
+    };
+
+    // 按需加载评论系统
+    const loadCommentSystem = (type) => {
+      if (loadedComments[type]) {
+        // 如果已加载，只需显示对应容器
+        document.querySelector(`.${type}-comment`).style.display = 'block';
+        return;
+      }
+
+      // 根据类型加载对应的脚本
+      commentConfig[type]?.load();
+      loadedComments[type] = true;
+    };
+
+    // 评论组件选择器
+    const changeActiveCommentItems = (item) => {
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let i = 0; i < commentItems.length; i++) {
+        commentItems[i].classList.remove('active');
+      }
+      item.classList.add('active');
+
+      // 获取要加载的评论系统类型
+      const commentType = item.getAttribute('data-selector');
+
+      // 隐藏所有评论系统
+      hideAllComments();
+
+      // 加载选中的评论系统
+      loadCommentSystem(commentType);
+    };
+
+    const commentInit = () => {
+      // 评论组件选择器点击事件
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let item of commentItems) {
+        item.addEventListener('click', () => {
+          // 保存选择器状态
+          const commentType = item.getAttribute('data-selector');
+          window.localStorage.setItem('commentType', commentType);
+          // 切换选中状态
+          changeActiveCommentItems(item);
+        });
+      }
+
+      // 检查是否需要加载默认评论系统
+      if (defaultComment) {
+        const defaultSelectorItem = document.querySelector(`[data-selector="${defaultComment}"]`);
+        if (!defaultSelectorItem) return;
+        defaultSelectorItem.style.display = 'block';
+        defaultSelectorItem.classList.add('active');
+        loadCommentSystem(defaultComment);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', commentInit);
+    } else {
+      commentInit();
+    }
+  };
+  loadComments();
+</script>
+
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.10.4' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+  </body>
+  </html>
