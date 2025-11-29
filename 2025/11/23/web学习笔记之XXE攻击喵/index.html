@@ -24,12 +24,28 @@
 <meta property="og:site_name" content="Dawn">
 <meta property="og:description" content="web学习笔记之XXE攻击喵~[TOC] XXE？什么好东西，快让Gloria咬一口~XXE（XML External Entity Injection），全称为XML外部实体注入 那么首先了解一下…XML是什么？XML是Extensible Markup Language（可扩展标记语言）的缩写。简单来说，XML是一种用于储存和传输数据的纯文本格式，他和HTML（超文本标记语言）很像，但目的不同">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/1.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/2.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/3.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/6.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/5.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/9.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/10.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/11.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/12.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/14.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/15.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/16.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/17.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/18.png">
+<meta property="og:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/19.png">
 <meta property="article:published_time" content="2025-11-23T09:19:21.000Z">
-<meta property="article:modified_time" content="2025-11-26T15:21:40.984Z">
+<meta property="article:modified_time" content="2025-11-29T06:57:25.435Z">
 <meta property="article:author" content="Gloria">
 <meta property="article:tag" content="Web安全">
 <meta property="article:tag" content="XXE攻击">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/1.png">
     <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -147,7 +163,7 @@
     <div class="sidebar-wrap" data-aos="fade-up">
           <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
 <div class="sidebar-toc-wrapper toc-div-class" >
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web学习笔记之XXE攻击喵~</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XXE%EF%BC%9F%E4%BB%80%E4%B9%88%E5%A5%BD%E4%B8%9C%E8%A5%BF%EF%BC%8C%E5%BF%AB%E8%AE%A9Gloria%E5%92%AC%E4%B8%80%E5%8F%A3"><span class="toc-number">1.1.</span> <span class="toc-text">XXE？什么好东西，快让Gloria咬一口~</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%A3%E4%B9%88%E9%A6%96%E5%85%88%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E2%80%A6XML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">那么首先了解一下…XML是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%80%E4%BB%A5XXE%E5%93%A5%E4%BB%AC%E4%BD%A0%E5%88%B0%E5%BA%95%E8%B0%81%E5%95%8A%EF%BC%9F%E8%B7%9F%E6%88%91%E4%BB%AC%E5%AE%B6XML%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%81%EF%BC%81-%EF%B9%81-%EF%B9%81-%E2%86%92"><span class="toc-number">1.1.2.</span> <span class="toc-text">所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web学习笔记之XXE攻击喵~</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XXE%EF%BC%9F%E4%BB%80%E4%B9%88%E5%A5%BD%E4%B8%9C%E8%A5%BF%EF%BC%8C%E5%BF%AB%E8%AE%A9Gloria%E5%92%AC%E4%B8%80%E5%8F%A3"><span class="toc-number">1.1.</span> <span class="toc-text">XXE？什么好东西，快让Gloria咬一口~</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%A3%E4%B9%88%E9%A6%96%E5%85%88%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E2%80%A6XML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">那么首先了解一下…XML是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%80%E4%BB%A5XXE%E5%93%A5%E4%BB%AC%E4%BD%A0%E5%88%B0%E5%BA%95%E8%B0%81%E5%95%8A%EF%BC%9F%E8%B7%9F%E6%88%91%E4%BB%AC%E5%AE%B6XML%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%81%EF%BC%81-%EF%B9%81-%EF%B9%81-%E2%86%92"><span class="toc-number">1.3.</span> <span class="toc-text">所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9D%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E2%80%9C%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">核心原理：什么是”外部实体“？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OK%EF%BC%8C%E4%BA%86%E8%A7%A3%E4%BA%86DTD%E5%92%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E5%90%8E%EF%BC%8C%E6%88%91%E4%BB%AC%E6%9D%A5%E7%9C%8B%E7%9C%8BXXE%E5%88%B0%E5%BA%95%E8%83%BD%E5%B8%AE%E6%88%91%E4%BB%AC%E5%B9%B2%E4%BA%9B%E4%BB%80%E4%B9%88%E5%8F%AD"><span class="toc-number">1.3.2.</span> <span class="toc-text">OK，了解了DTD和实体之后，我们来看看XXE到底能帮我们干些什么叭~</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%EF%BC%89%E6%9C%89%E5%9B%9E%E6%98%BEXXE-Nornal-Output-XXE"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">1）有回显XXE(Nornal&#x2F;Output XXE)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%EF%BC%89%E6%97%A0%E5%9B%9E%E6%98%BEXXE%EF%BC%88Blind-XXE%EF%BC%89"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2）无回显XXE（Blind XXE）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ok%EF%BC%8C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E5%85%88%E5%88%B0%E8%BF%99%E9%87%8C%E5%8F%AD%EF%BC%8C%E5%90%8E%E9%9D%A2%E4%BC%9A%E8%B4%B4%E9%A2%98%E5%81%9A%E7%9A%84-%E2%9D%81%C2%B4%E2%97%A1-%E2%9D%81"><span class="toc-number">1.4.</span> <span class="toc-text">ok，系统学习先到这里叭，后面会贴题做的~(❁´◡&#96;❁)</span></a></li></ol></li></ol>
 </div>
 </div>
           <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
@@ -219,7 +235,7 @@
       <div class="article-date">
   <span class="article-date-link icon-calendar" data-aos="zoom-in">
     <time datetime="2025-11-23T09:19:21.000Z" itemprop="datePublished">2025-11-23</time>
-    <time style="display: none;" id="post-update-time">2025-11-26</time>
+    <time style="display: none;" id="post-update-time">2025-11-29</time>
   </span>
 </div>
 
@@ -234,7 +250,7 @@
     <div class="e-content article-entry" itemprop="articleBody">
         <h2 id="web学习笔记之XXE攻击喵"><a href="#web学习笔记之XXE攻击喵" class="headerlink" title="web学习笔记之XXE攻击喵~"></a>web学习笔记之XXE攻击喵~</h2><p>[TOC]</p>
 <h3 id="XXE？什么好东西，快让Gloria咬一口"><a href="#XXE？什么好东西，快让Gloria咬一口" class="headerlink" title="XXE？什么好东西，快让Gloria咬一口~"></a>XXE？什么好东西，快让Gloria咬一口~</h3><p>XXE（XML External Entity Injection），全称为<strong>XML外部实体注入</strong></p>
-<h4 id="那么首先了解一下…XML是什么？"><a href="#那么首先了解一下…XML是什么？" class="headerlink" title="那么首先了解一下…XML是什么？"></a>那么首先了解一下…XML是什么？</h4><p>XML是Extensible Markup Language（可扩展标记语言）的缩写。简单来说，XML是一种用于<strong>储存和传输数据的纯文本格式</strong>，他和HTML（超文本标记语言）很像，但目的不同。</p>
+<h3 id="那么首先了解一下…XML是什么？"><a href="#那么首先了解一下…XML是什么？" class="headerlink" title="那么首先了解一下…XML是什么？"></a>那么首先了解一下…XML是什么？</h3><p>XML是Extensible Markup Language（可扩展标记语言）的缩写。简单来说，XML是一种用于<strong>储存和传输数据的纯文本格式</strong>，他和HTML（超文本标记语言）很像，但目的不同。</p>
 <p>●<strong>核心区别</strong></p>
 <table>
 <thead>
@@ -266,14 +282,120 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">to</span>&gt;</span>用户<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span>Gloria<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">heading</span>&gt;</span>打个招呼<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>来跟Gloria玩喵<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">date</span>&gt;</span>2025-11-25<span class="tag">&lt;/<span class="name">date</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p><code>&lt;note&gt;</code>, <code>&lt;to&gt;</code>, <code>&lt;body&gt;</code> 这些标签不是计算机预设的，而是开发者为了描述这条数据<strong>自己发明</strong>的</p>
-<h4 id="所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！-﹁-﹁-→"><a href="#所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！-﹁-﹁-→" class="headerlink" title="所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→"></a>所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→</h4><p>简单来说，XXE就是攻击者通过在 XML 文件中定义“恶意变量”（<strong>实体</strong>），利用服务器端未正确配置的 XML 解析器，强制服务器去<strong>读取本地文件</strong>、<strong>访问内网</strong>或<strong>发起拒绝服务攻击</strong></p>
+<h3 id="所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！-﹁-﹁-→"><a href="#所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！-﹁-﹁-→" class="headerlink" title="所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→"></a>所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→</h3><p>简单来说，XXE就是攻击者通过在 XML 文件中定义“恶意变量”（<strong>实体</strong>），利用服务器端未正确配置的 XML 解析器，强制服务器去<strong>读取本地文件</strong>、<strong>访问内网</strong>或<strong>发起拒绝服务攻击</strong></p>
 <p>在了解XML之前，我们需要先搞懂XML的一个特性：<strong>DTD和实体</strong></p>
-<p>●<strong>核心原理：什么是”外部实体“？</strong></p>
-<p>XML允许在头部定义DTD（Document Type Definition）<strong>用来规定XML的格式</strong>，在DTD中，你可以定义<strong>实体（Entity）</strong>，实体就类似编程语言中的变量或者宏。</p>
+<h4 id="核心原理：什么是”外部实体“？"><a href="#核心原理：什么是”外部实体“？" class="headerlink" title="核心原理：什么是”外部实体“？"></a>核心原理：什么是”外部实体“？</h4><p>XML允许在头部定义DTD（Document Type Definition）<strong>用来规定XML的格式</strong>，在DTD中，你可以定义<strong>实体（Entity）</strong>，实体就类似编程语言中的变量或者宏。</p>
+<p><strong>XML中的Entity实体：</strong></p>
+<p>&lt;、&gt;、&amp;、’、”z\在XML中为特殊符号，不能直接使用，需要用实体来表示</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>XML中表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;</code></td>
+<td><code>&amp;lt;</code></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td><code>&amp;qt;</code></td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td><code>&amp;amp;</code></td>
+</tr>
+<tr>
+<td><code>&#39;</code></td>
+<td><code>&amp;apos;</code></td>
+</tr>
+<tr>
+<td><code>&quot;</code></td>
+<td><code>&amp;quot;</code></td>
+</tr>
+</tbody></table>
 <p>正常用法（内部实体）：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">note</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="keyword">author</span> <span class="string">&quot;Gemini&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span><span class="symbol">&amp;author;</span><span class="tag">&lt;/<span class="name">from</span>&gt;</span> <span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">note</span> [ </span></span><br><span class="line"><span class="meta">&lt;!-- 这里表示在&lt;note&gt;之后可以使用实体 --&gt;</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="keyword">author</span> <span class="string">&quot;Gloria&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">&lt;!-- 这里自定义的实体名字为author，”“里面的是这个实体的值--&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span><span class="symbol">&amp;author;</span><span class="tag">&lt;/<span class="name">from</span>&gt;</span> <span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>危险用法（外部实体）：</p>
+<p>XML的强大之处在于，这个变量的值不仅仅可以是字符串，还可以引用外部资源（External Entity）。如下所见，我们就可以读取&#x2F;etc&#x2F;passwd之类的敏感文件</p>
+<p>关键就在于<code>SYSTEM</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">USER</span>[</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY a <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///etc/passwd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;a;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span> <span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="OK，了解了DTD和实体之后，我们来看看XXE到底能帮我们干些什么叭"><a href="#OK，了解了DTD和实体之后，我们来看看XXE到底能帮我们干些什么叭" class="headerlink" title="OK，了解了DTD和实体之后，我们来看看XXE到底能帮我们干些什么叭~"></a>OK，了解了DTD和实体之后，我们来看看XXE到底能帮我们干些什么叭~</h4><h5 id="1）有回显XXE-Nornal-Output-XXE"><a href="#1）有回显XXE-Nornal-Output-XXE" class="headerlink" title="1）有回显XXE(Nornal&#x2F;Output XXE)"></a>1）<strong>有回显XXE(Nornal&#x2F;Output XXE)</strong></h5><p>服务器会将解析后的XML实体内容直接显示在页面上（HTTP  Response Body）</p>
+<p>目标：获取flag文件（查找&#x2F;flag、&#x2F;etc&#x2F;passwd、源代码）</p>
+<p>使用的实体：通用实体（General Entity）</p>
+<p>关键技巧：php伪协议代码</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">root</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY a <span class="keyword">SYSTEM</span> <span class="string">&quot;php://filter/read=convert.base64-encode/resource=index.php&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;a;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里贴两道道小题~就正常内置浏览器抓包，修改XXE即可，就不放题目了</p>
+<p>第一道，盲猜flag在根目录下面（题目来源于learnctf，侵权删）</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/1.png" class="" title="图片正常显示了喵~">
+
+<p>第二道，提示让我们查看login.php，所以我们选择php:&#x2F;&#x2F;filter伪协议来查看login.php的源码</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/2.png" class="" title="图片正常显示了喵~">
+
+<p>然后使用base64在线解密工具即可</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/3.png" class="" title="图片正常显示了喵~">
+
+<h5 id="2）无回显XXE（Blind-XXE）"><a href="#2）无回显XXE（Blind-XXE）" class="headerlink" title="2）无回显XXE（Blind XXE）"></a>2）<strong>无回显XXE（Blind XXE）</strong></h5><p>服务器解析了 XML，但不返回任何内容（或者只返回”Success”&#x2F;“Error”）。</p>
+<p>●<strong>通过XML漏洞进行内网端口扫描</strong></p>
+<p>这是CTF中结合XXE考点的常见玩法。当你发现了一个XXE漏洞，但flag不在文件里面，或者你想攻击内网的其他服务（如Admin或者Redis面板）时，可以考虑。</p>
+<p>一般情况下，80端口对外开放，8080等端口只对内开放，所以我们想要获取内网中的东西时，我们可以攻击80端口来达到间接攻击内网中其他端口的目的</p>
+<p>原理：利用SYSTEM关键字支持http:&#x2F;&#x2F;协议的特性，强制让受害服务器尝试连接某个IP和端口。</p>
+<p>payload样例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml versu=ion=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">user</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY a <span class="keyword">SYSTEM</span> <span class="string">&quot;http://127.0.0.1:80&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;a;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果成功进入内网，然后就开始爆破，按照响应时间或者响应长度找异常值啊（啊，有钱的佬可以直接使用bp intruder爆破啊，没有的话我们使用Extension将其转化为python代码去爆破啊&lt;(＿　＿)&gt;）</p>
+<p>这里贴一道题目喵~</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/6.png" class="" title="图片正常显示了喵~">
+
+<p>步骤：</p>
+<p>先在内置浏览器抓包啊，我们尝试80端口</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/5.png" class="" title="图片正常显示了喵~">
+
+<p>对其进行base64解码，发现和网页上的内容一样喵，说明我们现在访问的这个网站的首页，就是在80端口运行的,所以我们就可以通过80端口，来攻击其他的端口</p>
+<p>然后我们根据提示，使用Extension进行爆破（这里用的python，有条件的可以用bp的intruder）</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/9.png" class="" title="图片正常显示了喵~">
+
+<p>得到了端口号为7430，所以我们再次使用php:&#x2F;&#x2F;fliter伪协议读取这个端口号的源码</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/10.png" class="" title="图片正常显示了喵~">
+
+<p>再进行base64解码，得到flag</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/11.png" class="" title="图片正常显示了喵~">
+
+<p>●<strong>通过XXE进行HTTP内网主机探测</strong></p>
+<p>这个与内网端口扫描有相似之处，都是通过攻击一个外网可以访问的，并将其作为跳板，来获取内网中一些敏感的东西。</p>
+<p>贴一道栗子~</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/12.png" class="" title="图片正常显示了喵~">
+
+<p>步骤：</p>
+<p>1）推断内网网段</p>
+<p>使用file:&#x2F;&#x2F;协议读取文件：&#x2F;etc&#x2F;hosts、&#x2F;proc&#x2F;net&#x2F;arp 、proc&#x2F;net&#x2F;fib_trie</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/14.png" class="" title="图片正常显示了喵~">
 
 
+
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/15.png" class="" title="图片正常显示了喵~">
+
+
+
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/16.png" class="" title="图片正常显示了喵~">
+
+<p>会发现172.16.84.X这个常出现，可能就是内网网段，接下来就要扫描这个网段下的主机</p>
+<p>2）使用php:&#x2F;&#x2F;filter伪协议获取内网网段中的随便一个ip，然后进行爆破（1-255）</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/17.png" class="" title="图片正常显示了喵~">
+
+
+
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/18.png" class="" title="图片正常显示了喵~">
+
+<p>说明这个ip是不可到达的，访问不到这个ip</p>
+<p>我们进行爆破（会有些慢，耐心等待一下喵~），得到，再进行解码即可</p>
+<img src="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/19.png" class="" title="图片正常显示了喵~">
+
+<h3 id="ok，系统学习先到这里叭，后面会贴题做的-❁´◡-❁"><a href="#ok，系统学习先到这里叭，后面会贴题做的-❁´◡-❁" class="headerlink" title="ok，系统学习先到这里叭，后面会贴题做的~(❁´◡&#96;❁)"></a>ok，系统学习先到这里叭，后面会贴题做的~(❁´◡&#96;❁)</h3>
     </div>
     <footer class="article-footer">
         <a data-aos="zoom-in" href="/2025/11/23/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5/#comments" class="article-comment-link">
@@ -347,10 +469,10 @@
       </div>
       <div>
         <span class="icon-brush"></span>
-        13k
+        14.2k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        01:00
+        01:04
       </div>
       <div>
         <span class="icon-eye"></span>
@@ -372,7 +494,7 @@
   <div class="sidebar-wrap">
         <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
 <div class="sidebar-toc-wrapper toc-div-class" >
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web学习笔记之XXE攻击喵~</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XXE%EF%BC%9F%E4%BB%80%E4%B9%88%E5%A5%BD%E4%B8%9C%E8%A5%BF%EF%BC%8C%E5%BF%AB%E8%AE%A9Gloria%E5%92%AC%E4%B8%80%E5%8F%A3"><span class="toc-number">1.1.</span> <span class="toc-text">XXE？什么好东西，快让Gloria咬一口~</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%A3%E4%B9%88%E9%A6%96%E5%85%88%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E2%80%A6XML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">那么首先了解一下…XML是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%80%E4%BB%A5XXE%E5%93%A5%E4%BB%AC%E4%BD%A0%E5%88%B0%E5%BA%95%E8%B0%81%E5%95%8A%EF%BC%9F%E8%B7%9F%E6%88%91%E4%BB%AC%E5%AE%B6XML%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%81%EF%BC%81-%EF%B9%81-%EF%B9%81-%E2%86%92"><span class="toc-number">1.1.2.</span> <span class="toc-text">所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BXXE%E6%94%BB%E5%87%BB%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web学习笔记之XXE攻击喵~</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XXE%EF%BC%9F%E4%BB%80%E4%B9%88%E5%A5%BD%E4%B8%9C%E8%A5%BF%EF%BC%8C%E5%BF%AB%E8%AE%A9Gloria%E5%92%AC%E4%B8%80%E5%8F%A3"><span class="toc-number">1.1.</span> <span class="toc-text">XXE？什么好东西，快让Gloria咬一口~</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%A3%E4%B9%88%E9%A6%96%E5%85%88%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E2%80%A6XML%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">那么首先了解一下…XML是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%80%E4%BB%A5XXE%E5%93%A5%E4%BB%AC%E4%BD%A0%E5%88%B0%E5%BA%95%E8%B0%81%E5%95%8A%EF%BC%9F%E8%B7%9F%E6%88%91%E4%BB%AC%E5%AE%B6XML%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%81%EF%BC%81-%EF%B9%81-%EF%B9%81-%E2%86%92"><span class="toc-number">1.3.</span> <span class="toc-text">所以XXE哥们你到底谁啊？跟我们家XML有什么关系！！( ﹁ ﹁ ) ~→</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9D%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E2%80%9C%EF%BC%9F"><span class="toc-number">1.3.1.</span> <span class="toc-text">核心原理：什么是”外部实体“？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OK%EF%BC%8C%E4%BA%86%E8%A7%A3%E4%BA%86DTD%E5%92%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E5%90%8E%EF%BC%8C%E6%88%91%E4%BB%AC%E6%9D%A5%E7%9C%8B%E7%9C%8BXXE%E5%88%B0%E5%BA%95%E8%83%BD%E5%B8%AE%E6%88%91%E4%BB%AC%E5%B9%B2%E4%BA%9B%E4%BB%80%E4%B9%88%E5%8F%AD"><span class="toc-number">1.3.2.</span> <span class="toc-text">OK，了解了DTD和实体之后，我们来看看XXE到底能帮我们干些什么叭~</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%EF%BC%89%E6%9C%89%E5%9B%9E%E6%98%BEXXE-Nornal-Output-XXE"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">1）有回显XXE(Nornal&#x2F;Output XXE)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%EF%BC%89%E6%97%A0%E5%9B%9E%E6%98%BEXXE%EF%BC%88Blind-XXE%EF%BC%89"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2）无回显XXE（Blind XXE）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ok%EF%BC%8C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E5%85%88%E5%88%B0%E8%BF%99%E9%87%8C%E5%8F%AD%EF%BC%8C%E5%90%8E%E9%9D%A2%E4%BC%9A%E8%B4%B4%E9%A2%98%E5%81%9A%E7%9A%84-%E2%9D%81%C2%B4%E2%97%A1-%E2%9D%81"><span class="toc-number">1.4.</span> <span class="toc-text">ok，系统学习先到这里叭，后面会贴题做的~(❁´◡&#96;❁)</span></a></li></ol></li></ol>
 </div>
 </div>
         <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
@@ -498,7 +620,7 @@
           description: "",
           stripContent: "web学习笔记之XXE攻击喵~[TOC] XXE？什么好东西，快让Gloria咬一口~XXE（XML External Entity Injection），全称为XML外部实体注入 那么首先了解一下…XML是什么？XML是Extensible Markup Language（可扩展标记语言）的缩写。简单来说，XML是一种用于储存和传输数据的纯文本格式，他和HTML（超文本标记语言）很像，但目的不同。 ●核心区别    特性 HTML XML    目的 显示数据（让页面好看） 存储&amp;#x2F;传",
           date: "Sun Nov 23 2025 17:19:21 GMT+0800",
-          updated: "Wed Nov 26 2025 23:21:40 GMT+0800",
+          updated: "Sat Nov 29 2025 14:57:25 GMT+0800",
           cover: "/images/6.jpg",
         };
       </script>
