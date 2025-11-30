@@ -17,12 +17,12 @@
     
 <link rel="stylesheet" href="/css/loader.css">
 
-    <meta name="description" content="Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 **操作：**观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段）">
+    <meta name="description" content="Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 操作：观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段） ●如果">
 <meta property="og:type" content="article">
 <meta property="og:title" content="web做题日记之文件上传喵">
 <meta property="og:url" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/index.html">
 <meta property="og:site_name" content="Dawn">
-<meta property="og:description" content="Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 **操作：**观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段）">
+<meta property="og:description" content="Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 操作：观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段） ●如果">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/1.png">
 <meta property="og:image" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/2.png">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/9.png">
 <meta property="og:image" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/10.png">
 <meta property="article:published_time" content="2025-11-29T07:13:21.000Z">
-<meta property="article:modified_time" content="2025-11-30T10:50:45.794Z">
+<meta property="article:modified_time" content="2025-11-30T15:13:48.812Z">
 <meta property="article:author" content="Gloria">
 <meta property="article:tag" content="Web安全">
 <meta property="article:tag" content="文件上传">
@@ -247,7 +247,7 @@
         <h2 id="Web做题笔记之文件上传喵"><a href="#Web做题笔记之文件上传喵" class="headerlink" title="Web做题笔记之文件上传喵~"></a>Web做题笔记之文件上传喵~</h2><p>[TOC]</p>
 <h3 id="嗯，好的，事情是这样的➡-➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传…-ε-┬┬﹏┬┬-3，所以来补文件上传来了…"><a href="#嗯，好的，事情是这样的➡-➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传…-ε-┬┬﹏┬┬-3，所以来补文件上传来了…" class="headerlink" title="嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…"></a>嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…</h3><h3 id="我们先来了解一下常规解题步骤"><a href="#我们先来了解一下常规解题步骤" class="headerlink" title="我们先来了解一下常规解题步骤"></a>我们先来了解一下常规解题步骤</h3><p><strong>侦察—绕过—利用</strong></p>
 <h4 id="侦察与测试-Reconnaissance"><a href="#侦察与测试-Reconnaissance" class="headerlink" title="侦察与测试(Reconnaissance)"></a>侦察与测试(Reconnaissance)</h4><p><strong>1.首先要判断服务器环境</strong></p>
-<p>**操作：**观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段）</p>
+<p><strong>操作：</strong><br>观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段）</p>
 <p>●如果是php+Apache➡尝试.haccess攻击</p>
 <p>●如果是Nginx➡可能存在解析漏洞</p>
 <p>●如果是Windows服务器➡文件名大小写通常不敏感，可以尝试大小写绕过等</p>
@@ -261,14 +261,14 @@
 <p><strong>操作：</strong></p>
 <p>1）将文件修改后缀为.jpg或者.png，点击上传</p>
 <p>2）在bp中拦截请求，将.jpg改为.php然后放行</p>
-<p>**原因：**前端代码（JavaScript）是在用户的浏览器里运行。通过抓包，我们可以绕过任何前端限制</p>
+<p><strong>原因：</strong><br>前端代码（JavaScript）是在用户的浏览器里运行。通过抓包，我们可以绕过任何前端限制</p>
 <hr>
 <p><strong>2.绕过MIME Type检测</strong></p>
 <p><strong>现象：</strong></p>
 <p>前端过了，但是服务器返回文件类型不正确</p>
 <p><strong>操作：</strong></p>
 <p>在bp中，找到Content-Tpye字段，将Content-Type：application&#x2F;octet-stream（脚本文件的默认类型）修改为Content-Type：image&#x2F;jpeg或者image&#x2F;png</p>
-<p>**原因：**很多后端代码只检查HTTP头部的Content-Type，而这个字段完全可控</p>
+<p><strong>原因：</strong><br>很多后端代码只检查HTTP头部的Content-Type，而这个字段完全可控</p>
 <p><strong>3.绕过文件后缀黑名单</strong></p>
 <p><strong>现象</strong>：服务器提示“不能上传 .php 文件”。这说明它有一个“黑名单”。 </p>
 <p><strong>操作</strong>：尝试 PHP 的其他变体后缀</p>
@@ -281,9 +281,9 @@
 <p>payload：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GIF89a</span><br><span class="line">    &lt;script language=<span class="string">&quot;php&quot;</span>&gt;<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<p>**原因：**服务器可能是使用了getmagesize()等函数去读取文件的前几个字节（幻数），判断它是不是真的图片</p>
+<p><strong>原因：</strong><br>服务器可能是使用了getmagesize()等函数去读取文件的前几个字节（幻数），判断它是不是真的图片</p>
 <p><strong>5.针对某些特殊的服务器</strong></p>
-<p>**现象：**黑名单非常严格，几乎封死了所有带ph的后缀，只允许上传.jpg，而且服务器为Apache或者Nginx，而且允许上传配置文件。</p>
+<p><strong>现象：</strong><br>黑名单非常严格，几乎封死了所有带ph的后缀，只允许上传.jpg，而且服务器为Apache或者Nginx，而且允许上传配置文件。</p>
 <p><strong>操作：</strong>（以Apache为例）</p>
 <p>先上传一个名为<code>.haccess</code>的文件，内容如下</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">AddType</span> application/x-httpd-php .jpg</span><br></pre></td></tr></table></figure>
@@ -577,9 +577,9 @@
           url: "http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/",
           excerpt: "",
           description: "",
-          stripContent: "Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 **操作：**观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段） ●如果是php+Apache➡尝试.haccess攻击 ●如果是Nginx➡可能存在解析漏洞 ●如",
+          stripContent: "Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 操作：观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段） ●如果是php+Apache➡尝试.haccess攻击 ●如果是Nginx➡可能存在解析漏洞 ●如果是Wi",
           date: "Sat Nov 29 2025 15:13:21 GMT+0800",
-          updated: "Sun Nov 30 2025 18:50:45 GMT+0800",
+          updated: "Sun Nov 30 2025 23:13:48 GMT+0800",
           cover: "/images/10.jpg",
         };
       </script>
