@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/17.png">
 <meta property="og:image" content="http://example.com/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/18.png">
 <meta property="article:published_time" content="2025-11-29T07:13:21.000Z">
-<meta property="article:modified_time" content="2025-12-16T06:50:13.596Z">
+<meta property="article:modified_time" content="2025-12-17T09:38:46.977Z">
 <meta property="article:author" content="Gloria">
 <meta property="article:tag" content="Web安全">
 <meta property="article:tag" content="文件上传">
@@ -238,7 +238,7 @@
       <div class="article-date">
   <span class="article-date-link icon-calendar" data-aos="zoom-in">
     <time datetime="2025-11-29T07:13:21.000Z" itemprop="datePublished">2025-11-29</time>
-    <time style="display: none;" id="post-update-time">2025-12-16</time>
+    <time style="display: none;" id="post-update-time">2025-12-17</time>
   </span>
 </div>
 
@@ -406,8 +406,8 @@
 <p>还是先做尝试，把进阶了不知道几版的<code>&lt;?= @eval($_POST&#123;&#39;cmd&#39;&#125;); ?&gt;</code>传上去，发现又提示文件类型错误</p>
 <p><del>好吧，我知道，你又要开始闹了</del>   ╮(╯-╰)╭</p>
 <p>那还说啥了，我直接上反引号，简直就是绕过的神！</p>
-<p>尝试payload为<code>&lt;?= `tac ../flag*` ?&gt;</code>（从前面的经验来看，flag一般不在根目录，而在下一层）</p>
-<p>正常传入.user.ini和shell.png，然后访问url＋&#x2F;upload&#x2F;index.php即可</p>
+<p>尝试payload为<code>&lt;?= `tac ../flag*` ?&gt;</code><br>注：你上传的文件在 <code>/var/www/html/upload/</code> 目录下，一般没有flag，所以尝试去上一级html里面去查找，所以payload为<code>../flag*</code></p>
+<p>正常传入.user.ini和shell.png，然后访问url＋&#x2F;upload&#x2F;index.php即可<br>注：这里这么访问的原因是：访问index.php的时候，<strong>php引擎启动</strong>，看了一眼目录，发现了.user.ini，所以按照.user.ini，将shell.png里的恶意代码执行了<br>其实直接访问upload&#x2F;也可以，但是访问upload&#x2F;index.php可以确保php引擎一定被触发，<strong>因为.user.ini 是 PHP 的配置文件，它只有在 PHP 引擎启动并解析 PHP 文件时才会被读取</strong>（前提是index.php存在，但是一般都存在</p>
 <p>得到flag</p>
 <img src="/2025/11/29/Web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%96%B5/18.png" class="" title="图片正常显示了喵~">
 
@@ -563,10 +563,10 @@
       </div>
       <div>
         <span class="icon-brush"></span>
-        18.6k
+        18.7k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        01:22
+        01:23
       </div>
       <div>
         <span class="icon-eye"></span>
@@ -714,7 +714,7 @@
           description: "",
           stripContent: "Web做题笔记之文件上传喵~[TOC] 嗯，好的，事情是这样的➡_➡，Gloria在做ISCTF2024的时候，发现我这个傻篮子居然不会文件上传….ε(┬┬﹏┬┬)3，所以来补文件上传来了…我们先来了解一下常规解题步骤侦察—绕过—利用 侦察与测试(Reconnaissance)1.首先要判断服务器环境 操作：观察URL后缀（如.php、.jsp等）或者查看HTTP响应头（Server字段） ●如果是php+Apache➡尝试.haccess攻击 ●如果是Nginx➡可能存在解析漏洞 ●如果是Wi",
           date: "Sat Nov 29 2025 15:13:21 GMT+0800",
-          updated: "Tue Dec 16 2025 14:50:13 GMT+0800",
+          updated: "Wed Dec 17 2025 17:38:46 GMT+0800",
           cover: "/images/10.jpg",
         };
       </script>
