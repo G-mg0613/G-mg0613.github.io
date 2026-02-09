@@ -257,12 +257,30 @@
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2026-01-01</span>
-        <span><span class="icon-pencil"></span>0 words</span>
-        <span><span class="icon-clock"></span>1 min</span>
+        <span><span class="icon-pencil"></span>2.1k words</span>
+        <span><span class="icon-clock"></span>10 mins</span>
       </div>
       <h2 class="post-title">web做题日记之布尔注入喵</h2>
       <article class="post-article">
-          
+          web学习笔记之布尔注入喵[TOC]
+布尔注入？什么东西喵？不会显示查询出来的数据，但是会显示某种状态，这时候的注入就叫做布尔注入（boolean）或者盲注（blind），只能根据真假两种状态来进行注入攻击
+边做边看喵~
+1_sql_bool_db_name（获取数据库名）题目：
+
+
+依旧先检验能否进行SQL注入
+输入1&amp;#39; and 1=1#以及1&amp;#39; and 1=2#，如果出现两种状态，说明可以进行SQL注入 
+
+
+
+
+
+
+
+获取数据库名
+1.首先判断数据库长度
+以前直接使用database()就能获取数据库名，现在不行，因为不显示任何语句，只显示状态
+所以我们改写成1&amp;#39;
       </article>
     </div>
   </div>
@@ -503,10 +521,10 @@ XML
       </div>
       <div>
         <span class="icon-brush"></span>
-        21.9k
+        24.1k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        01:37
+        01:46
       </div>
       <div>
         <span class="icon-eye"></span>
