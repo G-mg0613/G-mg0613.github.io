@@ -48,8 +48,10 @@
 <meta property="og:image" content="http://example.com/2026/03/16/MISC-MISC-MISC%E5%96%B5/22.png">
 <meta property="og:image" content="http://example.com/2026/03/16/MISC-MISC-MISC%E5%96%B5/23.png">
 <meta property="og:image" content="http://example.com/2026/03/16/MISC-MISC-MISC%E5%96%B5/24.png">
+<meta property="og:image" content="http://example.com/2026/03/16/MISC-MISC-MISC%E5%96%B5/26.png">
+<meta property="og:image" content="http://example.com/2026/03/16/MISC-MISC-MISC%E5%96%B5/27.png">
 <meta property="article:published_time" content="2026-03-16T13:10:21.000Z">
-<meta property="article:modified_time" content="2026-03-21T12:01:56.523Z">
+<meta property="article:modified_time" content="2026-03-21T13:00:51.272Z">
 <meta property="article:author" content="Gloria">
 <meta property="article:tag" content="misc">
 <meta name="twitter:card" content="summary">
@@ -405,8 +407,25 @@
 <p>提示flag位置在图片末尾</p>
 <p>010上！</p>
 <p>使用010打开一看，又是两个IDAT，习惯性先删去第一个，发现得不到flag</p>
-<p>又看了一眼图片末尾</p>
-<p>嗷嗷嗷，吃完饭回来补这一道喵！</p>
+<p>因为提示图片末尾，所以看了一眼图片末尾</p>
+<img src="/2026/03/16/MISC-MISC-MISC%E5%96%B5/26.png" class="" title="图片正常显示了喵~">
+
+<p>其实是没有直接的flag的，但是仔细看会有ctfshow的痕迹，而且会发现，其实不止一个地方有ctfshow的痕迹，总共有四个（只展示一个了这里），这里会用到<strong>正则搜索</strong></p>
+<p>知识点喵➡<strong>正则搜索</strong></p>
+<p>正则表达式（Regular Expression，简称Regex，代码里常写为re），经常会用来处理misc中的乱码，而且会在像配置WAF规则拦截带有<code>UNION.*SELECT</code>的恶意SQL注入请求使用</p>
+<p>简单来说，正则搜索就是找<strong>符合某种规律的模式</strong>，比如<code>c.t.f..*?&#125;</code></p>
+<p><code>.</code>：点号是超级通配符，意思是任意一个字符</p>
+<p><code>.*</code>：代表匹配任意数量的任意字符</p>
+<p><code>?</code>：代表非贪婪模式，意思是一旦碰到后面那个}就立即停止，不要再往下多拿了</p>
+<p>然后既然知道了这道题存在<strong>字符穿插（间隔插入）</strong>，并且看得出来，这道题目是<strong>每隔两个字符取一个</strong>，因此我们来编写一个oy脚本来得出这四个flag</p>
+<p>（这里插一句，如果完全没有规律，那么就需要用到高级一点的<strong>正则表达式分组提取</strong>或者<strong>写for循环配合if条件语句</strong>，以后遇到了再说喵）</p>
+<p>编写脚本ing（这里用的是pycharm，vscode也可以喵）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re <span class="comment">#导入正则表达式模块</span></span><br><span class="line"><span class="comment">#rb的意思是read binary（以纯二进制模式读取）</span></span><br><span class="line"><span class="comment">#使用with open（…）的好处是运行完可以自动关闭文件</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;misc13.png&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    data = f.read() <span class="comment">#把图片的全部底层数据吸进内存，存到data变量里面</span></span><br><span class="line"><span class="comment">#定义我们要找的规律，前面那个b，代表的是byte（字节串），因为我们都进来的是二进制字节，所以匹配规则也必须是字节串</span></span><br><span class="line">pattern = re.<span class="built_in">compile</span>(<span class="string">b&#x27;c.t.f..*?&#125;&#x27;</span>)</span><br><span class="line"><span class="comment">#findall像一个高级筛子，他会把data里面所有符合上述规则的片段都找出来，装进一个列表（数组）里面</span></span><br><span class="line">possible_flags = pattern.findall(data)</span><br><span class="line"><span class="keyword">for</span> fake_flag <span class="keyword">in</span> possible_flags:</span><br><span class="line">    <span class="comment">#现在的fake_flag长成b&#x27;c\x01t\x02f\x03...&#x27;，包含各种看不懂的十六进制垃圾字符</span></span><br><span class="line">    <span class="comment">#fake_flag[::2]：使用切片，从头到尾，每隔一个字符提取一次</span></span><br><span class="line">    <span class="comment">#.decode()：因为切片提取出来的依然是带着b前缀的字节串，decode负责把她接吗成我们正常能阅读的字符串</span></span><br><span class="line">    real_flag = fake_flag[::<span class="number">2</span>].decode()</span><br><span class="line">    <span class="built_in">print</span>(real_flag)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后运行得到四个flag，挨个尝试，倒数第二个是正确的喵</p>
+<img src="/2026/03/16/MISC-MISC-MISC%E5%96%B5/27.png" class="" title="图片正常显示了喵~">
+
+<p>好的不写了喵，web作业还没写喵…</p>
 
     </div>
     <footer class="article-footer">
@@ -473,10 +492,10 @@
       </div>
       <div>
         <span class="icon-brush"></span>
-        38.2k
+        38.9k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        02:53
+        02:55
       </div>
       <div>
         <span class="icon-eye"></span>
@@ -624,7 +643,7 @@
           description: "",
           stripContent: "MISC MISC MISC喵[TOC] 依旧尝试ai教做题喵 1.0 ctfshow-misc签到题目➡   什么信息都没有给，就让Gloria输密码喵？那么去考虑一下伪加密或者弱密码爆破喵 知识点喵➡ZIP伪加密 ZIP文件的十六进制数据中，有特定的标记位来告诉解压软件这个文件是否加了密。出题人只是把未加密的标记位改为了已加密，以此来骗过解压软件，因此，我们只需要把目录里的加密标志该回去就行 我们将这个zip拖入到010里面   看图片喵！ ZIP文件的结构： 前面是正文（本地文件头，标志是",
           date: "Mon Mar 16 2026 21:10:21 GMT+0800",
-          updated: "Sat Mar 21 2026 20:01:56 GMT+0800",
+          updated: "Sat Mar 21 2026 21:00:51 GMT+0800",
           cover: "/images/30.jpg",
         };
       </script>
